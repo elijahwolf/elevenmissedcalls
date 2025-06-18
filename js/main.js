@@ -7,10 +7,10 @@ import {
     exportMergedRecording,
     getTimeLeft,
     isRecording
-  } from './js/record.js';
+  } from './record.js';
   
-  import { updateTimerDisplay, resetTimerDisplay } from './js/timer.js';
-  import { toggleRecordingUI, resetUI, showTab } from './js/ui.js';
+  import { updateTimerDisplay, resetTimerDisplay } from './timer.js';
+  import { toggleRecordingUI, resetUI, showTab } from './ui.js';
   
   // DOM elements
   const startBtn = document.getElementById('startBtn');
