@@ -42,6 +42,15 @@ p {
   margin: 1.5rem 0;
 }
 
+.number a {
+  color: #00ff99;
+  text-decoration: none;
+}
+
+.number a:hover {
+  text-shadow: 0 0 5px #00ff99;
+}
+
 .social-links {
   font-size: 0.8rem;
   word-spacing: 0.2rem;
