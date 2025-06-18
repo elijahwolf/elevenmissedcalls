@@ -52,6 +52,7 @@
       <div class="mic-indicator" id="micIndicator">
         <span class="mic-dot"></span> recording...
       </div>
+      <div class="timer" id="timer">90s remaining</div>
       <audio id="player" controls style="display: none;"></audio>
       <button id="sendBtn" disabled>Send</button>
       <p class="note">recordings are anonymous and capped at 90 seconds.</p>
@@ -62,6 +63,9 @@
     let mediaRecorder;
     let audioChunks = [];
     let recordTimeout;
+    let timeLeft = 90;
+    let stream;
+    let timerInterval;
 
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
@@ -69,63 +73,78 @@
     const sendBtn = document.getElementById('sendBtn');
     const player = document.getElementById('player');
     const micIndicator = document.getElementById('micIndicator');
+    const timerDisplay = document.getElementById('timer');
 
-    startBtn.onclick = async () => {
+    async function startRecording() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
-        mediaRecorder = new MediaRecorder(stream, { mimeType });
-        audioChunks = [];
 
-        mediaRecorder.ondataavailable = (event) => {
-          if (event.data.size > 0) audioChunks.push(event.data);
+        mediaRecorder = new MediaRecorder(stream, { mimeType });
+        micIndicator.style.display = 'block';
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) audioChunks.push(e.data);
         };
 
         mediaRecorder.onstop = () => {
-          clearTimeout(recordTimeout);
           micIndicator.style.display = 'none';
+          stream.getTracks().forEach(track => track.stop());
+          stopBtn.disabled = true;
+          startBtn.disabled = timeLeft <= 0;
+          sendBtn.disabled = audioChunks.length === 0;
 
-          stream.getTracks().forEach(track => track.stop()); // release the mic
-
-          if (audioChunks.length === 0) return;
-          const blob = new Blob(audioChunks, { type: mimeType });
-          const url = URL.createObjectURL(blob);
-          player.src = url;
-          player.style.display = 'block';
-          sendBtn.disabled = false;
+          if (audioChunks.length > 0) {
+            const blob = new Blob(audioChunks, { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            player.src = url;
+            player.style.display = 'block';
+          }
         };
 
         mediaRecorder.start();
-        micIndicator.style.display = 'block';
         startBtn.disabled = true;
         stopBtn.disabled = false;
         sendBtn.disabled = true;
 
-        recordTimeout = setTimeout(() => {
-          if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
-        }, 90000);
+        if (!timerInterval) {
+          timerInterval = setInterval(() => {
+            timeLeft--;
+            timerDisplay.textContent = timeLeft + 's remaining';
+            if (timeLeft <= 0) {
+              stopRecording();
+            }
+          }, 1000);
+        }
 
       } catch (err) {
         alert('Microphone access error: ' + err.message);
       }
-    };
+    }
 
-    stopBtn.onclick = () => {
+    function stopRecording() {
       if (mediaRecorder && mediaRecorder.state === 'recording') {
         mediaRecorder.stop();
-        stopBtn.disabled = true;
-        startBtn.disabled = false;
+        if (stream) stream.getTracks().forEach(track => track.stop());
       }
-    };
+    }
 
-    resetBtn.onclick = () => {
+    function resetRecording() {
       audioChunks = [];
+      timeLeft = 90;
+      timerDisplay.textContent = '90s remaining';
+      clearInterval(timerInterval);
+      timerInterval = null;
       player.src = '';
       player.style.display = 'none';
       sendBtn.disabled = true;
-    };
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    }
 
+    startBtn.onclick = startRecording;
+    stopBtn.onclick = stopRecording;
+    resetBtn.onclick = resetRecording;
     sendBtn.onclick = () => {
       alert('Uploading not implemented yet. This will be saved in the future backend.');
     };
