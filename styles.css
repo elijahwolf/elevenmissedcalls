@@ -97,6 +97,49 @@ a:hover {
   }
 }
 
+.recorder {
+  margin-top: 3rem;
+  padding: 2rem;
+  border: 3px solid #00ff99;
+  background-color: rgba(0, 0, 0, 0.85);
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 0 10px #00ff99;
+  text-align: center;
+}
+
+.record-title {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #00ff99;
+}
+
+button {
+  background-color: transparent;
+  color: #00ff99;
+  border: 2px solid #00ff99;
+  padding: 0.5rem 1rem;
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.6rem;
+  margin: 0.5rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.note {
+  font-size: 0.6rem;
+  opacity: 0.75;
+  margin-top: 1rem;
+}
+
+audio {
+  margin-top: 1rem;
+}
+
 @media (max-width: 480px) {
   body {
     font-size: 10px;
@@ -130,5 +173,24 @@ a:hover {
     align-items: center;
     gap: 0.4rem;
     font-size: 0.7rem;
+  }
+
+  .recorder {
+    padding: 1.2rem;
+    margin-top: 2rem;
+  }
+
+  .record-title {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  button {
+    font-size: 0.5rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .note {
+    font-size: 0.55rem;
   }
 }

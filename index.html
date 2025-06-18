@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eleven Missed Calls</title>
+  <title>missed calls</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
@@ -29,12 +29,60 @@
     <p>just say it.</p>
     <p class="tagline">we're listening.<span class="cursor">_</span></p>
 
-    <p class="shared-label">some messages will be shared anonymously on:</p>
+    <p class="shared-label">some messages will be shared anonymously on</p>
     <p class="social-links">
       <a href="https://www.tiktok.com/@elevenmissedcalls" target="_blank">TikTok</a>
     </p>
 
     <div class="footer">powered by what you didn't say • est. 2023</div>
   </div>
+
+  <div class="recorder">
+    <h2 class="record-title">or record your own message</h2>
+    <button id="startBtn">Start Recording</button>
+    <button id="stopBtn" disabled>Stop</button>
+    <audio id="player" controls style="display: none;"></audio>
+    <button id="sendBtn" disabled>Send</button>
+    <p class="note">recordings are anonymous and capped at 90 seconds.</p>
+  </div>
+
+  <script>
+    let mediaRecorder;
+    let audioChunks = [];
+
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const sendBtn = document.getElementById('sendBtn');
+    const player = document.getElementById('player');
+
+    startBtn.onclick = async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const audioURL = URL.createObjectURL(audioBlob);
+        player.src = audioURL;
+        player.style.display = 'block';
+        sendBtn.disabled = false;
+      };
+
+      mediaRecorder.start();
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+    };
+
+    stopBtn.onclick = () => {
+      mediaRecorder.stop();
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    };
+
+    sendBtn.onclick = () => {
+      alert('Uploading not implemented yet. This will be saved in the future backend.');
+    };
+  </script>
 </body>
 </html>
