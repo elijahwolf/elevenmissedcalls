@@ -47,3 +47,11 @@ import {
   
   // Tabs
   window.showTab = showTab;
+  
+  // Automatically wire up tab buttons
+document.querySelectorAll('.tab-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const tabId = button.dataset.tab;
+      showTab(tabId);
+    });
+  });
