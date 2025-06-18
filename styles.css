@@ -24,6 +24,15 @@ body {
   box-sizing: border-box;
 }
 
+p {
+  margin: 0.5rem 0;
+}
+
+.social-links {
+  font-size: 0.8rem;
+  word-spacing: 0.2rem;
+}
+
 a {
   color: #00ff99;
   text-decoration: underline;
@@ -38,6 +47,34 @@ a {
 .footer {
   font-size: 0.6rem;
   margin-top: 2rem;
+}
+
+a:hover {
+  text-shadow: 0 0 5px #00ff99;
+}
+
+.cursor {
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+.window {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 10px #00ff99;
+  }
+  50% {
+    box-shadow: 0 0 20px #00ff99;
+  }
 }
 
 @media (max-width: 480px) {
@@ -59,5 +96,13 @@ a {
 
   p {
     font-size: 0.8rem;
+  }
+
+  .social-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
   }
 }
