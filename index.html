@@ -46,40 +46,81 @@
     <p class="note">recordings are anonymous and capped at 90 seconds.</p>
   </div>
 
+  <div class="mic-indicator" id="micIndicator">
+    <span class="mic-dot"></span> recording...
+  </div>
+
   <script>
     let mediaRecorder;
     let audioChunks = [];
-
+    let recordTimeout;
+  
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
     const sendBtn = document.getElementById('sendBtn');
     const player = document.getElementById('player');
-
+    const micIndicator = document.getElementById('micIndicator');
+  
     startBtn.onclick = async () => {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
-      audioChunks = [];
-
-      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-        const audioURL = URL.createObjectURL(audioBlob);
-        player.src = audioURL;
-        player.style.display = 'block';
-        sendBtn.disabled = false;
-      };
-
-      mediaRecorder.start();
-      startBtn.disabled = true;
-      stopBtn.disabled = false;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm')
+          ? 'audio/webm'
+          : 'audio/mp4';
+  
+        mediaRecorder = new MediaRecorder(stream, { mimeType });
+        audioChunks = [];
+  
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            audioChunks.push(event.data);
+          }
+        };
+  
+        mediaRecorder.onstop = () => {
+          clearTimeout(recordTimeout);
+          micIndicator.style.display = 'none';
+  
+          if (audioChunks.length === 0) {
+            alert('No audio captured.');
+            return;
+          }
+  
+          const audioBlob = new Blob(audioChunks, { type: mimeType });
+          const audioURL = URL.createObjectURL(audioBlob);
+  
+          player.src = audioURL;
+          player.style.display = 'block';
+          sendBtn.disabled = false;
+        };
+  
+        mediaRecorder.start();
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        sendBtn.disabled = true;
+        micIndicator.style.display = 'block';
+  
+        // Auto-stop after 90 seconds
+        recordTimeout = setTimeout(() => {
+          if (mediaRecorder && mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
+          }
+        }, 90000); // 90,000ms = 90 seconds
+  
+      } catch (err) {
+        alert('Microphone access error: ' + err.message);
+      }
     };
-
+  
     stopBtn.onclick = () => {
-      mediaRecorder.stop();
-      startBtn.disabled = false;
-      stopBtn.disabled = true;
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        stopBtn.disabled = true;
+        startBtn.disabled = false;
+      }
     };
-
+  
     sendBtn.onclick = () => {
       alert('Uploading not implemented yet. This will be saved in the future backend.');
     };

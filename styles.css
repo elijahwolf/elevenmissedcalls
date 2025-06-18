@@ -140,6 +140,47 @@ audio {
   margin-top: 1rem;
 }
 
+.mic-indicator {
+  display: none;
+  font-size: 0.7rem;
+  color: #00ff99;
+  margin-top: 1rem;
+  text-transform: lowercase;
+  font-family: "Press Start 2P", monospace;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.mic-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: blink 1s infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @media (max-width: 480px) {
   body {
     font-size: 10px;
