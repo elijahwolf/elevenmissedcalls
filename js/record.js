@@ -10,7 +10,7 @@ export function isRecording() {
   return mediaRecorder && mediaRecorder.state === 'recording';
 }
 
-export function startRecording(onRecordingStart) {
+export function startRecording(onRecordingStart = () => {}) {
   navigator.mediaDevices.getUserMedia({ audio: true }).then(userStream => {
     stream = userStream;
     const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
@@ -18,11 +18,16 @@ export function startRecording(onRecordingStart) {
     audioChunks = [];
 
     mediaRecorder.ondataavailable = e => {
-      if (e.data.size > 0) audioChunks.push(e.data);
+      if (e.data && e.data.size > 0) {
+        audioChunks.push(e.data);
+      }
     };
 
     mediaRecorder.onstop = () => {
-      stream.getTracks().forEach(track => track.stop());
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+
       if (audioChunks.length > 0) {
         blobSegments.push(new Blob(audioChunks));
       }
@@ -30,11 +35,14 @@ export function startRecording(onRecordingStart) {
 
     mediaRecorder.start();
     onRecordingStart(true);
+  }).catch(err => {
+    console.error("Error accessing microphone:", err);
+    onRecordingStart(false);
   });
 }
 
 export function stopRecording() {
-  if (mediaRecorder && mediaRecorder.state === 'recording') {
+  if (isRecording()) {
     mediaRecorder.stop();
   }
 }
