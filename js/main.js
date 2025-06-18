@@ -48,7 +48,7 @@ import {
   }
   
   // Start recording
-  startBtn.onclick = () => {
+  startBtn.addEventListener('click', () => {
     startRecording(
       () => {
         toggleRecordingUI(true, startBtn, stopBtn, micIndicator);
@@ -61,25 +61,30 @@ import {
         previewRecording(); // triggered AFTER audio saved
       }
     );
-  };
+  });
   
-  // Stop button now only stops
-  stopBtn.onclick = () => {
+  // Stop only
+  stopBtn.addEventListener('click', () => {
     stopRecording();
-  };
+  });
   
-  // Reset recording
-  resetBtn.onclick = () => {
+  // Reset
+  resetBtn.addEventListener('click', () => {
     resetRecording();
     resetTimer();
     resetUI(player, submitBtn, startBtn, stopBtn);
     updateTimerDisplay();
-  };
+  });
   
-  // Submit (stub)
-  submitBtn.onclick = () => {
+  // Submit
+  submitBtn.addEventListener('click', () => {
     alert("Message submitted! (stub)");
-  };
+  });
   
-  // Tab switcher
-  window.showTab = showTab;
+  // Tab switching — now using event delegation
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.getAttribute('data-tab');
+      showTab(tabId);
+    });
+  });
