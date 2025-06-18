@@ -1,4 +1,3 @@
-/* Base styling */
 body {
   font-family: "Press Start 2P", monospace;
   background-color: black;
@@ -6,17 +5,18 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  text-align: center;
+  justify-content: center;
   min-height: 100vh;
   margin: 0;
-  padding: 2rem;
+  padding: 1rem;
+  background-image: none;
   box-sizing: border-box;
+  text-align: center;
 }
 
 .title {
   font-size: 2rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-shadow: 0 0 2px #00ff99, 0 0 5px #00ff99;
 }
 
@@ -24,20 +24,23 @@ body {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .tab-btn {
-  background: none;
-  border: 2px solid #00ff99;
-  color: #00ff99;
-  padding: 0.5rem 1rem;
   font-family: inherit;
-  cursor: pointer;
   font-size: 0.8rem;
+  background: black;
+  color: #00ff99;
+  border: 2px solid #00ff99;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
+  text-transform: lowercase;
 }
 
 .tab-btn.active {
-  background-color: #00ff99;
+  background: #00ff99;
   color: black;
 }
 
@@ -45,11 +48,11 @@ body {
   display: none;
   width: 100%;
   max-width: 600px;
-  margin-top: 1rem;
 }
 
 .tab-content.active {
   display: block;
+  margin: 0 auto;
 }
 
 .window {
@@ -58,20 +61,12 @@ body {
   padding: 2rem;
   box-shadow: 0 0 10px #00ff99;
   box-sizing: border-box;
-}
-
-.number {
-  font-size: 2rem;
-  margin: 1.5rem 0;
+  width: 100%;
+  margin: 0 auto;
 }
 
 p {
   margin: 0.75rem 0;
-}
-
-.social-links {
-  font-size: 0.8rem;
-  word-spacing: 0.2rem;
 }
 
 a {
@@ -84,125 +79,108 @@ a:hover {
   text-shadow: 0 0 5px #00ff99;
 }
 
+.number {
+  font-size: 2rem;
+  margin: 1.5rem 0;
+}
+
 .footer {
   font-size: 0.6rem;
   margin-top: 2rem;
 }
 
-.cursor {
-  animation: blink 1s steps(2, start) infinite;
-}
-
-@keyframes blink {
-  to {
-    visibility: hidden;
-  }
-}
-
-.window {
-  animation: pulse 3s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 10px #00ff99;
-  }
-  50% {
-    box-shadow: 0 0 20px #00ff99;
-  }
-}
-
-/* Recorder styles */
-.recorder-controls {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-
-button {
-  font-family: inherit;
-  font-size: 0.7rem;
-  padding: 0.5rem 1rem;
-  background-color: transparent;
-  border: 2px solid #00ff99;
-  color: #00ff99;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.social-links {
+  font-size: 0.8rem;
+  word-spacing: 0.2rem;
 }
 
 .mic-indicator {
   display: none;
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
   font-size: 0.7rem;
-  color: #ff0044;
+  text-transform: lowercase;
+}
+
+.mic-indicator.active {
+  display: block;
 }
 
 .mic-dot {
   display: inline-block;
-  width: 0.6rem;
-  height: 0.6rem;
-  background-color: #ff0044;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: red;
   border-radius: 50%;
-  margin-right: 0.5rem;
-  vertical-align: middle;
+  margin-right: 0.4rem;
 }
 
-.timer {
-  font-size: 0.8rem;
+.recorder-controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin-bottom: 0.75rem;
 }
 
-audio {
-  margin: 1rem 0 0.5rem 0;
-  width: 100%;
-  max-width: 100%;
+.recorded-length {
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.preview-controls {
+  margin-top: 0.5rem;
 }
 
 .note {
   font-size: 0.6rem;
-  opacity: 0.7;
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
 }
 
-/* Responsive styling */
+audio {
+  margin-top: 1rem;
+  max-width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  accent-color: #00ff99;
+}
+
 @media (max-width: 480px) {
   body {
     font-size: 10px;
   }
 
   .window {
-    padding: 1.2rem;
+    padding: 1rem;
   }
 
   .number {
     font-size: 1.5rem;
   }
 
-  h1 {
+  h1,
+  h2 {
     font-size: 1.2rem;
   }
 
-  p {
-    font-size: 0.8rem;
-  }
-
-  .social-links {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.7rem;
+  p,
+  .recorded-length {
+    font-size: 0.75rem;
   }
 
   .tab-btn {
+    padding: 0.3rem 0.8rem;
     font-size: 0.7rem;
-    padding: 0.4rem 0.8rem;
+  }
+
+  .footer,
+  .note {
+    font-size: 0.5rem;
+  }
+
+  .tabs {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }

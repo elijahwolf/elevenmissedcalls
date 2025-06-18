@@ -1,82 +1,81 @@
-// main.js — imports modules and wires everything together
+// main.js — connects UI, timer, and recording logic
 
 import {
     startRecording,
     stopRecording,
     resetRecording,
-    exportMergedRecording,
-    getTimeLeft,
-    isRecording,
-    getTotalRecordedTime
-  } from './js/record.js';
+    exportMergedRecording
+  } from './record.js';
   
   import {
-    updateTimerDisplay,
-    resetTimerDisplay,
-    updateRecordedLength
-  } from './js/timer.js';
+    startTimer,
+    stopTimer,
+    resetTimer,
+    getRecordedTime,
+    getMaxTime
+  } from './timer.js';
   
   import {
     toggleRecordingUI,
     resetUI,
     showTab
-  } from './js/ui.js';
+  } from './ui.js';
   
-  // DOM elements
+  // DOM Elements
   const startBtn = document.getElementById('startBtn');
   const stopBtn = document.getElementById('stopBtn');
   const resetBtn = document.getElementById('resetBtn');
-  const previewBtn = document.getElementById('previewBtn');
   const sendBtn = document.getElementById('sendBtn');
   const player = document.getElementById('player');
   const micIndicator = document.getElementById('micIndicator');
   const timerDisplay = document.getElementById('timer');
-  const recordedLengthDisplay = document.getElementById('recordedLength');
   
-  let hasPreviewed = false;
+  // Timer update function
+  function updateTimerDisplay() {
+    const current = getRecordedTime();
+    const max = getMaxTime();
+    timerDisplay.textContent = `Recorded: ${current} / ${max}s`;
+  }
   
-  // Event: Start Recording
-  startBtn.onclick = () => startRecording(
-    () => {
-      toggleRecordingUI(false, startBtn, stopBtn, micIndicator);
-      sendBtn.disabled = true;
-    },
-    (time) => {
-      updateTimerDisplay(time, timerDisplay);
-      updateRecordedLength(getTotalRecordedTime(), recordedLengthDisplay);
-    },
-    (isRecording) => {
-      toggleRecordingUI(isRecording, startBtn, stopBtn, micIndicator);
-    }
-  );
+  // Start recording
+  startBtn.onclick = () => {
+    startRecording(() => {
+      toggleRecordingUI(true, startBtn, stopBtn, micIndicator);
+      startTimer(updateTimerDisplay);
+    });
+  };
   
-  // Event: Stop Recording
-  stopBtn.onclick = () => stopRecording();
+  // Stop recording
+  stopBtn.onclick = () => {
+    stopRecording();
+    stopTimer();
+    toggleRecordingUI(false, startBtn, stopBtn, micIndicator);
+    updateTimerDisplay();
+    previewRecording(); // Auto-preview on stop
+  };
   
-  // Event: Reset
+  // Reset everything
   resetBtn.onclick = () => {
     resetRecording();
-    resetTimerDisplay(timerDisplay);
-    updateRecordedLength(0, recordedLengthDisplay);
-    resetUI(player, sendBtn, previewBtn, startBtn, stopBtn);
-    hasPreviewed = false;
+    resetTimer();
+    resetUI(player, sendBtn, startBtn, stopBtn);
+    updateTimerDisplay();
   };
   
-  // Event: Preview
-  previewBtn.onclick = async () => {
-    const blob = await exportMergedRecording();
-    const url = URL.createObjectURL(blob);
-    player.src = url;
-    player.style.display = 'block';
-    hasPreviewed = true;
-    sendBtn.disabled = false;
-  };
+  // Preview merged recording
+  function previewRecording() {
+    exportMergedRecording().then(blob => {
+      const url = URL.createObjectURL(blob);
+      player.src = url;
+      player.style.display = 'block';
+      sendBtn.disabled = false;
+    });
+  }
   
-  // Event: Send (for now, just replay)
+  // Send (stub for now)
   sendBtn.onclick = () => {
-    if (!hasPreviewed) return;
-    player.play();
+    alert("Message submitted! (stub)");
   };
   
-  // Tabs
+  // Tab logic
   window.showTab = showTab;

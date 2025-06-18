@@ -1,22 +1,34 @@
-// timer.js — handles countdown and duration display
+// timer.js — tracks total recorded duration
 
-let timeLeft = 90;
+let maxSeconds = 90;
+let recordedSeconds = 0;
+let countdownInterval;
 
-export function getTimeLeft() {
-  return timeLeft;
+export function startTimer(onUpdate) {
+  clearInterval(countdownInterval);
+  countdownInterval = setInterval(() => {
+    if (recordedSeconds >= maxSeconds) {
+      clearInterval(countdownInterval);
+    } else {
+      recordedSeconds++;
+      onUpdate(recordedSeconds);
+    }
+  }, 1000);
 }
 
-export function updateTimerDisplay(time, timerElement) {
-  timeLeft = time;
-  timerElement.textContent = `${time}s remaining`;
+export function stopTimer() {
+  clearInterval(countdownInterval);
 }
 
-export function resetTimerDisplay(timerElement) {
-  timeLeft = 90;
-  timerElement.textContent = '90s remaining';
+export function resetTimer() {
+  recordedSeconds = 0;
+  clearInterval(countdownInterval);
 }
 
-// NEW: show recorded time like "Recorded: 23s / 90s"
-export function updateRecordedLength(seconds, element) {
-  element.textContent = `Recorded: ${seconds}s / 90s`;
+export function getRecordedTime() {
+  return recordedSeconds;
+}
+
+export function getMaxTime() {
+  return maxSeconds;
 }
