@@ -53,6 +53,7 @@ import {
       () => {
         toggleRecordingUI(true, startBtn, stopBtn, micIndicator);
         startTimer(updateTimerDisplay);
+        startBtn.textContent = "Continue Recording";
       },
       () => {
         stopTimer();
@@ -73,6 +74,7 @@ import {
     resetRecording();
     resetTimer();
     resetUI(player, submitBtn, startBtn, stopBtn);
+    startBtn.textContent = "Start Recording";
     updateTimerDisplay();
   });
   
