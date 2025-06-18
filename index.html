@@ -52,8 +52,14 @@
       <div class="mic-indicator" id="micIndicator">
         <span class="mic-dot"></span> recording...
       </div>
+      <div class="audio-preview" id="audioPreview" style="display: none">
+        <div class="audio-bar">
+          <button id="playPauseBtn">▶</button>
+          <input type="range" id="seekBar" value="0" min="0" max="100" step="1" />
+          <span id="timeDisplay">0:00</span>
+        </div>
+      </div>
       <div class="recorded-length" id="recordedLength"></div>
-      <audio id="player" controls style="display: none;"></audio>
       <div class="preview-controls">
         <button id="submitBtn" disabled>Submit</button>
       </div>

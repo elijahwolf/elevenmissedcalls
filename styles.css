@@ -124,8 +124,9 @@ a:hover {
 }
 
 .recorded-length {
-  font-size: 0.9rem;
-  margin: 0.5rem 0;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  color: #00ff99;
 }
 
 .preview-controls {
@@ -140,10 +141,12 @@ a:hover {
 audio {
   margin-top: 1rem;
   max-width: 100%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  accent-color: #00ff99;
+  filter: hue-rotate(100deg) brightness(1.2) contrast(1.3);
+  background-color: black;
+  border: 2px solid #00ff99;
+  border-radius: 4px;
+  box-shadow: 0 0 10px #00ff99;
+  padding: 0.3rem;
 }
 
 button {
@@ -168,6 +171,80 @@ button:hover:enabled {
 button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+.audio-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.audio-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
+  background: black;
+  border: 2px solid #00ff99;
+  padding: 0.5rem;
+  box-shadow: 0 0 10px #00ff99;
+  border-radius: 4px;
+}
+
+#audioPreview button,
+#audioPreview input[type="range"] {
+  background: black;
+  color: #00ff99;
+  border: none;
+  font-family: "Press Start 2P", monospace;
+}
+
+#playPauseBtn {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  border: 2px solid #00ff99;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#playPauseBtn:hover {
+  background-color: #00ff99;
+  color: black;
+}
+
+#seekBar {
+  flex-grow: 1;
+  appearance: none;
+  height: 4px;
+  background: #00ff99;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+#seekBar::-webkit-slider-thumb {
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  background: #00ff99;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#seekBar::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  background: #00ff99;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#timeDisplay {
+  font-size: 0.75rem;
+  min-width: 3rem;
+  color: #00ff99;
 }
 
 @media (max-width: 480px) {
