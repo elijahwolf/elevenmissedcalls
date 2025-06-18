@@ -145,6 +145,30 @@ audio {
   accent-color: #00ff99;
 }
 
+button {
+  font-family: "Press Start 2P", monospace;
+  background: black;
+  color: #00ff99;
+  border: 2px solid #00ff99;
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-transform: lowercase;
+  margin: 0.25rem;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover:enabled {
+  background: #00ff99;
+  color: black;
+  text-shadow: 0 0 5px #00ff99;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 @media (max-width: 480px) {
   body {
     font-size: 10px;
