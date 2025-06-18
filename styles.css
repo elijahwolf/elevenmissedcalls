@@ -1,7 +1,7 @@
 body {
-  font-family: 'Press Start 2P', monospace;
+  font-family: "Press Start 2P", monospace;
   background-color: black;
-  color: #00FF99;
+  color: #00ff99;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,24 +9,25 @@ body {
   text-align: center;
   height: 100vh;
   margin: 0;
-  background-image: url('https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif');
+  background-image: url("https://i.imgur.com/qbmVkph.png");
   background-size: cover;
+  background-position: center;
   padding: 1rem;
   box-sizing: border-box;
 }
 
 .window {
   background-color: rgba(0, 0, 0, 0.85);
-  border: 3px solid #00FF99;
+  border: 3px solid #00ff99;
   padding: 2rem;
   width: 100%;
   max-width: 600px;
-  box-shadow: 0 0 10px #00FF99;
+  box-shadow: 0 0 10px #00ff99;
   box-sizing: border-box;
 }
 
 a {
-  color: #00FF99;
+  color: #00ff99;
   text-decoration: underline;
   word-break: break-word;
 }
