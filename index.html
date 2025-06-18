@@ -54,12 +54,16 @@
       </div>
       <div class="audio-preview" id="audioPreview" style="display: none">
         <div class="audio-bar">
-          <button id="playPauseBtn">▶</button>
+          <button id="playPauseBtn" class="icon-btn" aria-label="Play">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+              <polygon points="5,3 19,12 5,21" fill="currentColor" />
+            </svg>
+          </button>
           <input type="range" id="seekBar" value="0" min="0" max="100" step="1" />
           <span id="timeDisplay">0:00</span>
         </div>
       </div>
-      <div class="recorded-length" id="recordedLength"></div>
+      <div class="recorded-length" id="recordedLength">Recorded: 0s / 90s</div>
       <div class="preview-controls">
         <button id="submitBtn" disabled>Submit</button>
       </div>

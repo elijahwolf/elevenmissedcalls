@@ -174,62 +174,55 @@ button:disabled {
 }
 
 .audio-preview {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   margin-top: 1rem;
 }
 
 .audio-bar {
   display: flex;
   align-items: center;
-  width: 100%;
   gap: 0.5rem;
-  background: black;
-  border: 2px solid #00ff99;
-  padding: 0.5rem;
-  box-shadow: 0 0 10px #00ff99;
-  border-radius: 4px;
+  justify-content: center;
 }
 
-#audioPreview button,
-#audioPreview input[type="range"] {
-  background: black;
-  color: #00ff99;
+.icon-btn {
+  background: none;
   border: none;
-  font-family: "Press Start 2P", monospace;
-}
-
-#playPauseBtn {
-  font-size: 0.8rem;
-  padding: 0.3rem 0.6rem;
-  border: 2px solid #00ff99;
-  border-radius: 4px;
+  padding: 0.3rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00ff99;
+  fill: #00ff99;
+  transition: filter 0.2s ease;
 }
 
-#playPauseBtn:hover {
-  background-color: #00ff99;
-  color: black;
+.icon-btn:hover {
+  filter: brightness(1.5);
+}
+
+.icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 #seekBar {
-  flex-grow: 1;
-  appearance: none;
-  height: 4px;
-  background: #00ff99;
-  border-radius: 2px;
+  width: 150px;
+  height: 6px;
+  background: transparent;
+  accent-color: #00ff99;
   outline: none;
-  cursor: pointer;
+  border-radius: 4px;
 }
 
 #seekBar::-webkit-slider-thumb {
-  appearance: none;
   width: 10px;
   height: 10px;
   background: #00ff99;
+  border: none;
   border-radius: 50%;
   cursor: pointer;
+  appearance: none;
 }
 
 #seekBar::-moz-range-thumb {
@@ -242,8 +235,7 @@ button:disabled {
 }
 
 #timeDisplay {
-  font-size: 0.75rem;
-  min-width: 3rem;
+  font-size: 0.8rem;
   color: #00ff99;
 }
 
