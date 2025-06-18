@@ -25,16 +25,16 @@ import {
   const startBtn = document.getElementById('startBtn');
   const stopBtn = document.getElementById('stopBtn');
   const resetBtn = document.getElementById('resetBtn');
-  const sendBtn = document.getElementById('sendBtn');
+  const submitBtn = document.getElementById('submitBtn');
   const player = document.getElementById('player');
   const micIndicator = document.getElementById('micIndicator');
-  const timerDisplay = document.getElementById('timer');
+  const timerDisplay = document.getElementById('recordedLength');
   
   // Timer update function
   function updateTimerDisplay() {
     const current = getRecordedTime();
     const max = getMaxTime();
-    timerDisplay.textContent = `Recorded: ${current} / ${max}s`;
+    timerDisplay.textContent = `Recorded: ${current}s / ${max}s`;
   }
   
   // Start recording
@@ -51,31 +51,38 @@ import {
     stopTimer();
     toggleRecordingUI(false, startBtn, stopBtn, micIndicator);
     updateTimerDisplay();
-    previewRecording(); // Auto-preview on stop
+    previewRecording(); // auto-preview after stop
   };
   
-  // Reset everything
+  // Reset
   resetBtn.onclick = () => {
     resetRecording();
     resetTimer();
-    resetUI(player, sendBtn, startBtn, stopBtn);
+    resetUI(player, submitBtn, startBtn, stopBtn);
     updateTimerDisplay();
   };
   
-  // Preview merged recording
+  // Preview merged audio
   function previewRecording() {
     exportMergedRecording().then(blob => {
       const url = URL.createObjectURL(blob);
       player.src = url;
       player.style.display = 'block';
-      sendBtn.disabled = false;
+      submitBtn.disabled = false;
     });
   }
   
-  // Send (stub for now)
-  sendBtn.onclick = () => {
+  // Dummy send handler
+  submitBtn.onclick = () => {
     alert("Message submitted! (stub)");
   };
   
-  // Tab logic
-  window.showTab = showTab;
+  // Tab switching via dataset
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.getAttribute('data-tab');
+        showTab(tabId);
+      });
+    });
+  });
