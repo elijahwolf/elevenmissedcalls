@@ -23,7 +23,6 @@
     <button class="tab-btn" data-tab="recordTab">record</button>
   </div>
 
-  <!-- Call Tab -->
   <div class="tab-content active" id="callTab">
     <div class="window">
       <div class="number">
@@ -42,7 +41,6 @@
     </div>
   </div>
 
-  <!-- Record Tab -->
   <div class="tab-content" id="recordTab">
     <div class="window">
       <h2 class="record-title">record your own message</h2>
@@ -55,12 +53,16 @@
         <span class="mic-dot"></span> recording...
       </div>
       <div class="timer" id="timer">90s remaining</div>
+      <div class="recorded-length" id="recordedLength">Recorded: 0s / 90s</div>
       <audio id="player" controls style="display: none;"></audio>
-      <button id="sendBtn" disabled>Send</button>
+      <div class="preview-controls">
+        <button id="previewBtn">Preview</button>
+        <button id="submitBtn" disabled>Submit</button>
+      </div>
       <p class="note">recordings are anonymous and capped at 90 seconds.</p>
     </div>
   </div>
 
-  <script type="module" src="./js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
