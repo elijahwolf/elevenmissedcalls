@@ -1,4 +1,4 @@
-// main.js — imports modules and wires everything together
+// main.js — handles recording, preview, and tab logic
 
 import {
     startRecording,
@@ -9,25 +9,40 @@ import {
     isRecording
   } from './record.js';
   
-  import { updateTimerDisplay, resetTimerDisplay } from './timer.js';
-  import { toggleRecordingUI, resetUI, showTab } from './ui.js';
+  import {
+    updateTimerDisplay,
+    resetTimerDisplay
+  } from './timer.js';
+  
+  import {
+    toggleRecordingUI,
+    resetUI,
+    showTab
+  } from './ui.js';
   
   // DOM elements
   const startBtn = document.getElementById('startBtn');
   const stopBtn = document.getElementById('stopBtn');
   const resetBtn = document.getElementById('resetBtn');
-  const sendBtn = document.getElementById('sendBtn');
+  const previewBtn = document.getElementById('previewBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const sendBtn = document.getElementById('sendBtn'); // deprecated
   const player = document.getElementById('player');
   const micIndicator = document.getElementById('micIndicator');
   const timerDisplay = document.getElementById('timer');
+  const recordedLengthDisplay = document.getElementById('recordedLength');
   
-  // Recording events
+  // Event listeners
   startBtn.onclick = () => startRecording(
     () => {
       toggleRecordingUI(false, startBtn, stopBtn, micIndicator);
-      sendBtn.disabled = getTimeLeft() <= 0;
+      submitBtn.disabled = true;
     },
-    time => updateTimerDisplay(time, timerDisplay),
+    time => {
+      updateTimerDisplay(time, timerDisplay);
+      const recorded = 90 - time;
+      recordedLengthDisplay.textContent = `Recorded: ${recorded}s / 90s`;
+    },
     isRecording => toggleRecordingUI(isRecording, startBtn, stopBtn, micIndicator)
   );
   
@@ -36,20 +51,29 @@ import {
   resetBtn.onclick = () => {
     resetRecording();
     resetTimerDisplay(timerDisplay);
-    resetUI(player, sendBtn, startBtn, stopBtn);
+    recordedLengthDisplay.textContent = 'Recorded: 0s / 90s';
+    resetUI(player, previewBtn, startBtn, stopBtn);
+    submitBtn.disabled = true;
   };
   
-  sendBtn.onclick = async () => {
+  previewBtn.onclick = async () => {
     const blob = await exportMergedRecording();
     const url = URL.createObjectURL(blob);
     player.src = url;
     player.style.display = 'block';
+    submitBtn.disabled = false;
   };
   
-  // Tab switching via data attributes
+  submitBtn.onclick = () => {
+    alert('Your recording has been submitted.');
+    // Optional: Implement upload to backend
+  };
+  
+  // Tabs
   document.querySelectorAll('.tab-btn').forEach(button => {
     button.addEventListener('click', () => {
       const tabId = button.dataset.tab;
       showTab(tabId);
     });
   });
+  
