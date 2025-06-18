@@ -15,17 +15,11 @@ body {
 }
 
 .title {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
+  font-size: 2.25rem;
+  margin-bottom: 2rem;
   text-align: center;
   color: #00ff99;
-  text-shadow: 0 0 5px #00ff99;
-}
-
-.shared-label {
-  margin-top: 1.5rem;
-  font-size: 0.7rem;
-  opacity: 0.85;
+  text-shadow: 0 0 2px #00ff99;
 }
 
 .window {
@@ -35,6 +29,7 @@ body {
   width: 100%;
   max-width: 600px;
   box-shadow: 0 0 10px #00ff99;
+  animation: pulse 3s ease-in-out infinite;
   box-sizing: border-box;
 }
 
@@ -42,25 +37,31 @@ p {
   margin: 0.75rem 0;
 }
 
+.number {
+  font-size: 2rem;
+  margin: 1.5rem 0;
+}
+
 .social-links {
   font-size: 0.8rem;
   word-spacing: 0.2rem;
+}
+
+.shared-label {
+  margin-top: 2rem;
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+
+.footer {
+  font-size: 0.6rem;
+  margin-top: 2rem;
 }
 
 a {
   color: #00ff99;
   text-decoration: underline;
   word-break: break-word;
-}
-
-.number {
-  font-size: 2rem;
-  margin: 1.5rem 0;
-}
-
-.footer {
-  font-size: 0.6rem;
-  margin-top: 2rem;
 }
 
 a:hover {
@@ -75,10 +76,6 @@ a:hover {
   to {
     visibility: hidden;
   }
-}
-
-.window {
-  animation: pulse 3s ease-in-out infinite;
 }
 
 @keyframes pulse {
@@ -96,6 +93,11 @@ a:hover {
     font-size: 10px;
   }
 
+  .title {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+  }
+
   .window {
     padding: 1.2rem;
   }
@@ -104,12 +106,13 @@ a:hover {
     font-size: 1.5rem;
   }
 
-  h1 {
-    font-size: 1rem;
-  }
-
   p {
     font-size: 0.8rem;
+  }
+
+  .shared-label {
+    margin-top: 1.5rem;
+    font-size: 0.65rem;
   }
 
   .social-links {
