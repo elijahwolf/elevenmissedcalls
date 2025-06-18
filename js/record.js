@@ -10,7 +10,7 @@ export function isRecording() {
   return mediaRecorder && mediaRecorder.state === 'recording';
 }
 
-export function startRecording(onRecordingStart = () => {}) {
+export function startRecording(onRecordingStart = () => {}, onRecordingStop = () => {}) {
   navigator.mediaDevices.getUserMedia({ audio: true }).then(userStream => {
     stream = userStream;
     const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
@@ -24,13 +24,9 @@ export function startRecording(onRecordingStart = () => {}) {
     };
 
     mediaRecorder.onstop = () => {
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-
-      if (audioChunks.length > 0) {
-        blobSegments.push(new Blob(audioChunks));
-      }
+      if (stream) stream.getTracks().forEach(track => track.stop());
+      if (audioChunks.length > 0) blobSegments.push(new Blob(audioChunks));
+      onRecordingStop(); // trigger preview only after storing blob
     };
 
     mediaRecorder.start();
