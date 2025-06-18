@@ -11,19 +11,24 @@ body {
   margin: 0;
   background-image: url('https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif');
   background-size: cover;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .window {
   background-color: rgba(0, 0, 0, 0.85);
   border: 3px solid #00FF99;
   padding: 2rem;
+  width: 100%;
   max-width: 600px;
   box-shadow: 0 0 10px #00FF99;
+  box-sizing: border-box;
 }
 
 a {
   color: #00FF99;
   text-decoration: underline;
+  word-break: break-word;
 }
 
 .number {
@@ -34,4 +39,26 @@ a {
 .footer {
   font-size: 0.6rem;
   margin-top: 2rem;
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 10px;
+  }
+
+  .window {
+    padding: 1.2rem;
+  }
+
+  .number {
+    font-size: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1rem;
+  }
+
+  p {
+    font-size: 0.8rem;
+  }
 }
