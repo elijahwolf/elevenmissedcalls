@@ -14,6 +14,20 @@ body {
   box-sizing: border-box;
 }
 
+.title {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #00ff99;
+  text-shadow: 0 0 5px #00ff99;
+}
+
+.shared-label {
+  margin-top: 1.5rem;
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+
 .window {
   background-color: rgba(0, 0, 0, 0.85);
   border: 3px solid #00ff99;
@@ -25,7 +39,7 @@ body {
 }
 
 p {
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
 }
 
 .social-links {
