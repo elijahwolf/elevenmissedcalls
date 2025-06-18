@@ -187,6 +187,17 @@ audio {
   margin-top: 1rem;
 }
 
+.tab-content {
+  display: none !important;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tab-content.active {
+  display: block !important;
+}
+
 @media (max-width: 480px) {
   body {
     font-size: 10px;

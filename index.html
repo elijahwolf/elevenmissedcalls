@@ -61,7 +61,6 @@
   <script>
     let mediaRecorder;
     let audioChunks = [];
-    let stream;
     let recordTimeout;
 
     const startBtn = document.getElementById('startBtn');
@@ -73,12 +72,11 @@
 
     startBtn.onclick = async () => {
       try {
-        if (!stream) {
-          stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        }
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
         const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
         mediaRecorder = new MediaRecorder(stream, { mimeType });
+        audioChunks = [];
 
         mediaRecorder.ondataavailable = (event) => {
           if (event.data.size > 0) audioChunks.push(event.data);
@@ -87,6 +85,9 @@
         mediaRecorder.onstop = () => {
           clearTimeout(recordTimeout);
           micIndicator.style.display = 'none';
+
+          stream.getTracks().forEach(track => track.stop()); // release the mic
+
           if (audioChunks.length === 0) return;
           const blob = new Blob(audioChunks, { type: mimeType });
           const url = URL.createObjectURL(blob);
@@ -113,8 +114,8 @@
     stopBtn.onclick = () => {
       if (mediaRecorder && mediaRecorder.state === 'recording') {
         mediaRecorder.stop();
-        startBtn.disabled = false;
         stopBtn.disabled = true;
+        startBtn.disabled = false;
       }
     };
 
