@@ -1,3 +1,5 @@
+// record.js — handles recording and exporting merged audio
+
 let mediaRecorder;
 let audioChunks = [];
 let blobSegments = [];
@@ -15,7 +17,7 @@ export function isRecording() {
   return mediaRecorder && mediaRecorder.state === 'recording';
 }
 
-export function startRecording(onDataStop, onTimerUpdate, onRecordingEnd) {
+export function startRecording(onDataStop, onTimerUpdate, onRecordingStart) {
   if (timeLeft <= 0) return;
 
   navigator.mediaDevices.getUserMedia({ audio: true }).then(userStream => {
@@ -33,7 +35,7 @@ export function startRecording(onDataStop, onTimerUpdate, onRecordingEnd) {
     };
 
     mediaRecorder.start();
-    onRecordingEnd(true);
+    onRecordingStart(true);
 
     timerInterval = setInterval(() => {
       timeLeft--;

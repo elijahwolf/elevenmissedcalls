@@ -10,7 +10,7 @@ body {
   text-align: center;
   min-height: 100vh;
   margin: 0;
-  padding: 1rem;
+  padding: 2rem;
   box-sizing: border-box;
 }
 
@@ -45,6 +45,7 @@ body {
   display: none;
   width: 100%;
   max-width: 600px;
+  margin-top: 1rem;
 }
 
 .tab-content.active {
