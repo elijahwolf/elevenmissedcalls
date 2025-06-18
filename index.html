@@ -18,112 +18,123 @@
 <body>
   <h1 class="title">missed calls</h1>
 
-  <div class="window">
-    <div class="number">
-      <a href="tel:12066595565"><strong>(206)-659-5565</strong></a>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('callTab')">call</button>
+    <button class="tab-btn" onclick="showTab('recordTab')">record</button>
+  </div>
+
+  <div class="tab-content active" id="callTab">
+    <div class="window">
+      <div class="number">
+        <a href="tel:12066595565"><strong>(206)-659-5565</strong></a>
+      </div>
+      <p>leave an anonymous voicemail.</p>
+      <p>no names.</p>
+      <p>no pressure.</p>
+      <p>just say it.</p>
+      <p class="tagline">we're listening.<span class="cursor">_</span></p>
+      <p class="shared-label">some messages will be shared anonymously on:</p>
+      <p class="social-links">
+        <a href="https://www.tiktok.com/@elevenmissedcalls" target="_blank">TikTok</a>
+      </p>
+      <div class="footer">powered by what you didn't say • est. 2023</div>
     </div>
-
-    <p>leave an anonymous voicemail.</p>
-    <p>no names.</p>
-    <p>no pressure.</p>
-    <p>just say it.</p>
-    <p class="tagline">we're listening.<span class="cursor">_</span></p>
-
-    <p class="shared-label">some messages will be shared anonymously on</p>
-    <p class="social-links">
-      <a href="https://www.tiktok.com/@elevenmissedcalls" target="_blank">TikTok</a>
-    </p>
-
-    <div class="footer">powered by what you didn't say • est. 2023</div>
   </div>
 
-  <div class="recorder">
-    <h2 class="record-title">or record your own message</h2>
-    <button id="startBtn">Start Recording</button>
-    <button id="stopBtn" disabled>Stop</button>
-    <audio id="player" controls style="display: none;"></audio>
-    <button id="sendBtn" disabled>Send</button>
-    <p class="note">recordings are anonymous and capped at 90 seconds.</p>
-  </div>
-
-  <div class="mic-indicator" id="micIndicator">
-    <span class="mic-dot"></span> recording...
+  <div class="tab-content" id="recordTab">
+    <div class="window">
+      <h2 class="record-title">record your own message</h2>
+      <div class="recorder-controls">
+        <button id="startBtn">Start Recording</button>
+        <button id="stopBtn" disabled>Stop</button>
+        <button id="resetBtn">Start Over</button>
+      </div>
+      <div class="mic-indicator" id="micIndicator">
+        <span class="mic-dot"></span> recording...
+      </div>
+      <audio id="player" controls style="display: none;"></audio>
+      <button id="sendBtn" disabled>Send</button>
+      <p class="note">recordings are anonymous and capped at 90 seconds.</p>
+    </div>
   </div>
 
   <script>
     let mediaRecorder;
     let audioChunks = [];
+    let stream;
     let recordTimeout;
-  
+
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
+    const resetBtn = document.getElementById('resetBtn');
     const sendBtn = document.getElementById('sendBtn');
     const player = document.getElementById('player');
     const micIndicator = document.getElementById('micIndicator');
-  
+
     startBtn.onclick = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  
-        const mimeType = MediaRecorder.isTypeSupported('audio/webm')
-          ? 'audio/webm'
-          : 'audio/mp4';
-  
+        if (!stream) {
+          stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        }
+
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
         mediaRecorder = new MediaRecorder(stream, { mimeType });
-        audioChunks = [];
-  
+
         mediaRecorder.ondataavailable = (event) => {
-          if (event.data.size > 0) {
-            audioChunks.push(event.data);
-          }
+          if (event.data.size > 0) audioChunks.push(event.data);
         };
-  
+
         mediaRecorder.onstop = () => {
           clearTimeout(recordTimeout);
           micIndicator.style.display = 'none';
-  
-          if (audioChunks.length === 0) {
-            alert('No audio captured.');
-            return;
-          }
-  
-          const audioBlob = new Blob(audioChunks, { type: mimeType });
-          const audioURL = URL.createObjectURL(audioBlob);
-  
-          player.src = audioURL;
+          if (audioChunks.length === 0) return;
+          const blob = new Blob(audioChunks, { type: mimeType });
+          const url = URL.createObjectURL(blob);
+          player.src = url;
           player.style.display = 'block';
           sendBtn.disabled = false;
         };
-  
+
         mediaRecorder.start();
+        micIndicator.style.display = 'block';
         startBtn.disabled = true;
         stopBtn.disabled = false;
         sendBtn.disabled = true;
-        micIndicator.style.display = 'block';
-  
-        // Auto-stop after 90 seconds
+
         recordTimeout = setTimeout(() => {
-          if (mediaRecorder && mediaRecorder.state === 'recording') {
-            mediaRecorder.stop();
-          }
-        }, 90000); // 90,000ms = 90 seconds
-  
+          if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+        }, 90000);
+
       } catch (err) {
         alert('Microphone access error: ' + err.message);
       }
     };
-  
+
     stopBtn.onclick = () => {
       if (mediaRecorder && mediaRecorder.state === 'recording') {
         mediaRecorder.stop();
-        stopBtn.disabled = true;
         startBtn.disabled = false;
+        stopBtn.disabled = true;
       }
     };
-  
+
+    resetBtn.onclick = () => {
+      audioChunks = [];
+      player.src = '';
+      player.style.display = 'none';
+      sendBtn.disabled = true;
+    };
+
     sendBtn.onclick = () => {
       alert('Uploading not implemented yet. This will be saved in the future backend.');
     };
+
+    function showTab(id) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelector(`.tab-btn[onclick="showTab('${id}')"]`).classList.add('active');
+    }
   </script>
 </body>
 </html>

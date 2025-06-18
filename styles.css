@@ -5,9 +5,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
   background-image: none;
   padding: 1rem;
@@ -22,12 +22,42 @@ body {
   text-shadow: 0 0 2px #00ff99;
 }
 
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tab-btn {
+  background: transparent;
+  color: #00ff99;
+  border: 2px solid #00ff99;
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.6rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  background-color: #00ff99;
+  color: black;
+}
+
+.tab-content {
+  display: none;
+  width: 100%;
+  max-width: 600px;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 .window {
   background-color: rgba(0, 0, 0, 0.85);
   border: 3px solid #00ff99;
   padding: 2rem;
   width: 100%;
-  max-width: 600px;
   box-shadow: 0 0 10px #00ff99;
   animation: pulse 3s ease-in-out infinite;
   box-sizing: border-box;
@@ -77,6 +107,22 @@ a:hover {
   text-shadow: 0 0 5px #00ff99;
 }
 
+button {
+  background-color: transparent;
+  color: #00ff99;
+  border: 2px solid #00ff99;
+  padding: 0.5rem 1rem;
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.6rem;
+  margin: 0.5rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .cursor {
   animation: blink 1s steps(2, start) infinite;
 }
@@ -95,49 +141,6 @@ a:hover {
   50% {
     box-shadow: 0 0 20px #00ff99;
   }
-}
-
-.recorder {
-  margin-top: 3rem;
-  padding: 2rem;
-  border: 3px solid #00ff99;
-  background-color: rgba(0, 0, 0, 0.85);
-  max-width: 600px;
-  width: 100%;
-  box-shadow: 0 0 10px #00ff99;
-  text-align: center;
-}
-
-.record-title {
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  color: #00ff99;
-}
-
-button {
-  background-color: transparent;
-  color: #00ff99;
-  border: 2px solid #00ff99;
-  padding: 0.5rem 1rem;
-  font-family: "Press Start 2P", monospace;
-  font-size: 0.6rem;
-  margin: 0.5rem;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.note {
-  font-size: 0.6rem;
-  opacity: 0.75;
-  margin-top: 1rem;
-}
-
-audio {
-  margin-top: 1rem;
 }
 
 .mic-indicator {
@@ -162,16 +165,6 @@ audio {
   vertical-align: middle;
 }
 
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -179,6 +172,19 @@ audio {
   to {
     opacity: 1;
   }
+}
+
+audio {
+  margin-top: 1.5rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.note {
+  font-size: 0.6rem;
+  opacity: 0.75;
+  margin-top: 1rem;
 }
 
 @media (max-width: 480px) {
@@ -216,22 +222,12 @@ audio {
     font-size: 0.7rem;
   }
 
-  .recorder {
-    padding: 1.2rem;
-    margin-top: 2rem;
-  }
-
-  .record-title {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+  .note {
+    font-size: 0.55rem;
   }
 
   button {
     font-size: 0.5rem;
     padding: 0.4rem 0.8rem;
-  }
-
-  .note {
-    font-size: 0.55rem;
   }
 }
