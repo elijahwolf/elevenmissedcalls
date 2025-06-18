@@ -5,9 +5,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   text-align: center;
-  min-height: 100vh;
+  height: 100vh;
   margin: 0;
   background-image: none;
   padding: 1rem;
@@ -15,42 +15,17 @@ body {
 }
 
 .title {
-  font-size: 2.25rem;
+  font-size: 2rem;
   margin-bottom: 2rem;
   text-align: center;
   color: #00ff99;
-  text-shadow: 0 0 2px #00ff99;
+  text-shadow: 0 0 2px #00ff99, 0 0 5px #00ff99;
 }
 
-.tabs {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.tab-btn {
-  background: transparent;
-  color: #00ff99;
-  border: 2px solid #00ff99;
-  font-family: "Press Start 2P", monospace;
-  font-size: 0.6rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-}
-
-.tab-btn.active {
-  background-color: #00ff99;
-  color: black;
-}
-
-.tab-content {
-  display: none;
-  width: 100%;
-  max-width: 600px;
-}
-
-.tab-content.active {
-  display: block;
+.shared-label {
+  margin-top: 1.5rem;
+  font-size: 0.7rem;
+  opacity: 0.85;
 }
 
 .window {
@@ -58,8 +33,8 @@ body {
   border: 3px solid #00ff99;
   padding: 2rem;
   width: 100%;
+  max-width: 600px;
   box-shadow: 0 0 10px #00ff99;
-  animation: pulse 3s ease-in-out infinite;
   box-sizing: border-box;
 }
 
@@ -67,34 +42,9 @@ p {
   margin: 0.75rem 0;
 }
 
-.number {
-  font-size: 2rem;
-  margin: 1.5rem 0;
-}
-
-.number a {
-  color: #00ff99;
-  text-decoration: none;
-}
-
-.number a:hover {
-  text-shadow: 0 0 5px #00ff99;
-}
-
 .social-links {
   font-size: 0.8rem;
   word-spacing: 0.2rem;
-}
-
-.shared-label {
-  margin-top: 2rem;
-  font-size: 0.7rem;
-  opacity: 0.85;
-}
-
-.footer {
-  font-size: 0.6rem;
-  margin-top: 2rem;
 }
 
 a {
@@ -103,24 +53,18 @@ a {
   word-break: break-word;
 }
 
+.number {
+  font-size: 2rem;
+  margin: 1.5rem 0;
+}
+
+.footer {
+  font-size: 0.6rem;
+  margin-top: 2rem;
+}
+
 a:hover {
   text-shadow: 0 0 5px #00ff99;
-}
-
-button {
-  background-color: transparent;
-  color: #00ff99;
-  border: 2px solid #00ff99;
-  padding: 0.5rem 1rem;
-  font-family: "Press Start 2P", monospace;
-  font-size: 0.6rem;
-  margin: 0.5rem;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
 }
 
 .cursor {
@@ -133,6 +77,10 @@ button:disabled {
   }
 }
 
+.window {
+  animation: pulse 3s ease-in-out infinite;
+}
+
 @keyframes pulse {
   0%,
   100% {
@@ -143,15 +91,45 @@ button:disabled {
   }
 }
 
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tab-btn {
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.7rem;
+  background: none;
+  border: 2px solid #00ff99;
+  color: #00ff99;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.tab-btn.active,
+.tab-btn:hover {
+  background-color: #00ff99;
+  color: black;
+}
+
+.tab-content {
+  display: none;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 .mic-indicator {
   display: none;
-  font-size: 0.7rem;
-  color: #00ff99;
   margin-top: 1rem;
-  text-transform: lowercase;
-  font-family: "Press Start 2P", monospace;
-  text-align: center;
-  animation: fadeIn 0.3s ease-in-out;
+  font-size: 0.8rem;
+  color: #00ff99;
 }
 
 .mic-dot {
@@ -160,52 +138,39 @@ button:disabled {
   height: 8px;
   background-color: red;
   border-radius: 50%;
-  margin-right: 8px;
-  animation: blink 1s infinite;
-  vertical-align: middle;
+  margin-right: 6px;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.timer {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #00ff99;
 }
 
 audio {
-  margin-top: 1.5rem;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.note {
-  font-size: 0.6rem;
-  opacity: 0.75;
-  margin-top: 1rem;
-}
-
-.tab-content {
-  display: none !important;
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  margin-top: 1.5rem;
+  border-radius: 6px;
+  outline: none;
+  background: black;
+  filter: drop-shadow(0 0 4px #00ff99);
 }
 
-.tab-content.active {
-  display: block !important;
+audio::-webkit-media-controls-panel {
+  background-color: #111;
+  color: #00ff99;
+}
+
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-timeline,
+audio::-webkit-media-controls-time-remaining-display,
+audio::-webkit-media-controls-current-time-display {
+  filter: hue-rotate(120deg) brightness(1.2);
 }
 
 @media (max-width: 480px) {
   body {
     font-size: 10px;
-  }
-
-  .title {
-    font-size: 1.6rem;
-    margin-bottom: 1.5rem;
   }
 
   .window {
@@ -216,13 +181,12 @@ audio {
     font-size: 1.5rem;
   }
 
-  p {
-    font-size: 0.8rem;
+  h1 {
+    font-size: 1rem;
   }
 
-  .shared-label {
-    margin-top: 1.5rem;
-    font-size: 0.65rem;
+  p {
+    font-size: 0.8rem;
   }
 
   .social-links {
@@ -233,12 +197,11 @@ audio {
     font-size: 0.7rem;
   }
 
-  .note {
-    font-size: 0.55rem;
+  .timer {
+    font-size: 0.7rem;
   }
 
-  button {
-    font-size: 0.5rem;
-    padding: 0.4rem 0.8rem;
+  audio {
+    margin-top: 1rem;
   }
 }
