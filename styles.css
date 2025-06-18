@@ -9,9 +9,7 @@ body {
   text-align: center;
   height: 100vh;
   margin: 0;
-  background-image: url("https://i.imgur.com/YMj88C5.png");
-  background-size: cover;
-  background-position: center;
+  background-image: none;
   padding: 1rem;
   box-sizing: border-box;
 }
