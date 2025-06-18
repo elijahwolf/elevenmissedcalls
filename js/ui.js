@@ -1,4 +1,4 @@
-// ui.js — handles UI state changes and tab controls
+// ui.js — handles UI state and tab switching
 
 export function toggleRecordingUI(isRecording, startBtn, stopBtn, micIndicator) {
     startBtn.disabled = isRecording;
@@ -15,8 +15,21 @@ export function toggleRecordingUI(isRecording, startBtn, stopBtn, micIndicator) 
   }
   
   export function showTab(id) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    document.querySelector(`.tab-btn[onclick="showTab('${id}')"]`).classList.add('active');
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(tab => {
+      tab.classList.remove('active');
+    });
+  
+    // Remove active class from all tab buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+  
+    // Show selected tab content
+    const activeTab = document.getElementById(id);
+    if (activeTab) activeTab.classList.add('active');
+  
+    // Highlight selected tab button
+    const activeButton = document.querySelector(`.tab-btn[data-tab="${id}"]`);
+    if (activeButton) activeButton.classList.add('active');
   }

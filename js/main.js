@@ -8,6 +8,7 @@ import {
     getTimeLeft,
     isRecording
   } from './js/record.js';
+  
   import { updateTimerDisplay, resetTimerDisplay } from './js/timer.js';
   import { toggleRecordingUI, resetUI, showTab } from './js/ui.js';
   
@@ -20,7 +21,7 @@ import {
   const micIndicator = document.getElementById('micIndicator');
   const timerDisplay = document.getElementById('timer');
   
-  // Event listeners
+  // Recording events
   startBtn.onclick = () => startRecording(
     () => {
       toggleRecordingUI(false, startBtn, stopBtn, micIndicator);
@@ -45,11 +46,8 @@ import {
     player.style.display = 'block';
   };
   
-  // Tabs
-  window.showTab = showTab;
-  
-  // Automatically wire up tab buttons
-document.querySelectorAll('.tab-btn').forEach(button => {
+  // Tab switching via data attributes
+  document.querySelectorAll('.tab-btn').forEach(button => {
     button.addEventListener('click', () => {
       const tabId = button.dataset.tab;
       showTab(tabId);
