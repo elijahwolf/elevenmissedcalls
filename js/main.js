@@ -123,7 +123,7 @@ try {
     micStatus.hidden = true;
 } catch {
     micStatus.hidden = false;
-    micStatus.textContent = '🎤 Mic needed. Click to retry.';
+    micStatus.textContent = 'Mic needed. Click to retry.';
     micStatus.style.cursor = 'pointer';
     micStatus.onclick = () => {
     micStatus.textContent = 'Re-checking…';
@@ -136,9 +136,10 @@ try {
 startBtn.addEventListener('click', () => {
 navigator.mediaDevices.getUserMedia({ audio: true })
     .then(s => {
-    s.getTracks().forEach(t => t.stop());
-    micIndicator.style.display = 'flex';
-    timeLeftEl.textContent = `${getMaxTime()}s left`;
+        s.getTracks().forEach(t => t.stop());
+        micIndicator.style.display = 'flex';
+        const already = getRecordedTime();
+        timeLeftEl.textContent = `${Math.max(0, getMaxTime()-already)}s left`;
 
     startRecording(
         () => {
@@ -160,7 +161,7 @@ navigator.mediaDevices.getUserMedia({ audio: true })
     })
     .catch(() => {
     micStatus.hidden = false;
-    micStatus.textContent = '🎤 Denied. Click to try again.';
+    micStatus.textContent = 'Denied. Click to try again.';
     micStatus.style.cursor = 'pointer';
     });
 });

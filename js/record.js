@@ -74,6 +74,10 @@ export function resetRecording() {
 }
 
 export async function exportMergedRecording() {
+  if (!blobSegments.length) {
+    // nothing recorded yet → return an empty WAV to keep downstream safe
+    return new Blob([], { type: 'audio/wav' });
+  }
   const buffers = await Promise.all(
     blobSegments.map(blob =>
       blob.arrayBuffer().then(buf => audioContext.decodeAudioData(buf))
