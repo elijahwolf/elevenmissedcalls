@@ -34,7 +34,7 @@ const timeDisplay   = document.getElementById('timeDisplay');
 const audioPreview  = document.getElementById('audioPreview');
 
 // Mic permission banner
-//const micStatus = document.getElementById('micPermissionStatus');
+const micStatus = document.getElementById('micPermissionStatus');
 
 let audio     = new Audio();
 let isPlaying = false;
