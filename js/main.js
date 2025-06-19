@@ -34,7 +34,7 @@ const timeDisplay   = document.getElementById('timeDisplay');
 const audioPreview  = document.getElementById('audioPreview');
 
 // Mic permission banner
-const micStatus = document.getElementById('micPermissionStatus');
+//const micStatus = document.getElementById('micPermissionStatus');
 
 let audio     = new Audio();
 let isPlaying = false;
@@ -113,21 +113,21 @@ updatePlayIcon();
 });
 
 // CHECK MIC PERMISSIONS ON LOAD
-async function checkMicPermissions() {
+/* async function checkMicPermissions() {
 try {
     const s = await navigator.mediaDevices.getUserMedia({ audio: true });
     s.getTracks().forEach(t=>t.stop());
     micStatus.hidden = true;
 } catch {
     micStatus.hidden = false;
-    micStatus.textContent = '🎤 Mic needed. Click to retry.';
+    micStatus.textContent = 'mic needed. click to retry.';
     micStatus.style.cursor = 'pointer';
     micStatus.onclick = () => {
-    micStatus.textContent = 'Re-checking…';
+    micStatus.textContent = 're-checking…';
     checkMicPermissions();
     };
 }
-}
+}*/
 
 // START RECORD
 startBtn.addEventListener('click', () => {
@@ -192,4 +192,4 @@ btn.addEventListener('click', () => showTab(btn.dataset.tab))
 updateStartIcon();
 updateResetIcon();
 updatePlayIcon();
-checkMicPermissions();
+//checkMicPermissions();
