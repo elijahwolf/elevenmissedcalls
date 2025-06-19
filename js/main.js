@@ -21,25 +21,25 @@ import {
   } from './ui.js';
   
   // DOM Elements
-  const startBtn      = document.getElementById('startBtn');
-  const stopBtn       = document.getElementById('stopBtn');
-  const resetBtn      = document.getElementById('resetBtn');
-  const submitBtn     = document.getElementById('submitBtn');
-  const micIndicator  = document.getElementById('micIndicator');
-  const timeLeftEl    = document.getElementById('timeLeft');
-  const playPauseBtn  = document.getElementById('playPauseBtn');
-  const seekBar       = document.getElementById('seekBar');
-  const timeDisplay   = document.getElementById('timeDisplay');
-  const audioPreview  = document.getElementById('audioPreview');
-  const micStatus     = document.getElementById('micStatus');
+  const startBtn     = document.getElementById('startBtn');
+  const stopBtn      = document.getElementById('stopBtn');
+  const resetBtn     = document.getElementById('resetBtn');
+  const submitBtn    = document.getElementById('submitBtn');
+  const micIndicator = document.getElementById('micIndicator');
+  const timeLeftEl   = document.getElementById('timeLeft');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const seekBar      = document.getElementById('seekBar');
+  const timeDisplay  = document.getElementById('timeDisplay');
+  const audioPreview = document.getElementById('audioPreview');
+  const micStatus    = document.getElementById('micStatus');
   
   let audio     = new Audio();
   let isPlaying = false;
   
   // Format seconds as M:SS
   function formatTime(sec) {
-    const m = Math.floor(sec/60);
-    const s = Math.floor(sec%60).toString().padStart(2,'0');
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
   }
   
@@ -56,18 +56,18 @@ import {
   // Sync seek-bar & play/pause
   audio.addEventListener('timeupdate', () => {
     if (!audio.duration) return;
-    seekBar.value = (audio.currentTime / audio.duration)*100;
+    seekBar.value = (audio.currentTime / audio.duration) * 100;
     timeDisplay.textContent = formatTime(audio.currentTime);
   });
   seekBar.addEventListener('input', () => {
     if (!audio.duration) return;
-    audio.currentTime = (seekBar.value/100)*audio.duration;
+    audio.currentTime = (seekBar.value / 100) * audio.duration;
   });
   playPauseBtn.addEventListener('click', () => {
     if (isPlaying) {
       audio.pause(); updatePlayIcon();
     } else {
-      audio.play();  updatePauseIcon();
+      audio.play(); updatePauseIcon();
     }
     isPlaying = !isPlaying;
   });
@@ -113,11 +113,10 @@ import {
     `;
   }
   
-  // Check mic permission at load
-  async function checkMicPermissions() {
+  // Check mic permission at load\async function checkMicPermissions() {
     try {
-      const s = await navigator.mediaDevices.getUserMedia({audio:true});
-      s.getTracks().forEach(t=>t.stop());
+      const s = await navigator.mediaDevices.getUserMedia({ audio: true });
+      s.getTracks().forEach(t => t.stop());
       micStatus.textContent = '';
     } catch {
       micStatus.textContent = '🎤 Mic needed. Click to retry.';
@@ -131,24 +130,24 @@ import {
   
   // START button — preserves remaining time
   startBtn.addEventListener('click', () => {
-    navigator.mediaDevices.getUserMedia({audio:true})
+    navigator.mediaDevices.getUserMedia({ audio: true })
       .then(s => {
-        s.getTracks().forEach(t=>t.stop());
+        s.getTracks().forEach(t => t.stop());
         micIndicator.style.display = 'flex';
         timeLeftEl.textContent = `${getMaxTime()}s left`;
   
         startRecording(
           () => {
-            toggleRecordingUI(true,startBtn,stopBtn,micIndicator);
+            toggleRecordingUI(true, startBtn, stopBtn, micIndicator);
             startTimer(sec => {
               const left = getMaxTime() - sec;
-              timeLeftEl.textContent = `${Math.max(0,left)}s left`;
+              timeLeftEl.textContent = `${Math.max(0, left)}s left`;
             });
             micStatus.textContent = '';
           },
           () => {
             stopTimer();
-            toggleRecordingUI(false,startBtn,stopBtn,micIndicator);
+            toggleRecordingUI(false, startBtn, stopBtn, micIndicator);
             updateContinueIcon();
             micIndicator.style.display = 'none';
             previewRecording();
@@ -189,4 +188,4 @@ import {
   updateStartIcon();
   updateResetIcon();
   updatePlayIcon();
-  checkMicPermissions();
+  checkMicPermissions();  
