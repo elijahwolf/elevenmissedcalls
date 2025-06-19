@@ -150,7 +150,7 @@ a:hover {
 
 /* mic status (recording… + seconds-left) */
 .mic-indicator {
-  display: none;
+  display: none; /* shown via JS when recording starts */
   margin: 0.75rem 0;
   font-size: 0.8rem;
   color: #00ff99;
@@ -162,7 +162,6 @@ a:hover {
 }
 
 .mic-indicator .mic-dot {
-  display: inline-block;
   width: 0.5rem;
   height: 0.5rem;
   background-color: red;
@@ -181,11 +180,12 @@ a:hover {
   color: #ff5555;
   margin: 0.5rem 0;
   text-align: center;
+  display: block; /* toggled hidden/visible by JS */
 }
 
 /* audio-preview container */
 .audio-preview {
-  display: none;
+  display: none; /* shown via JS when previewRecording() runs */
   margin: 1rem 0;
 }
 
