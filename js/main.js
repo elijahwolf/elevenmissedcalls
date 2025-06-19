@@ -33,6 +33,14 @@ const seekBar = document.getElementById('seekBar');
 const timeDisplay = document.getElementById('timeDisplay');
 const audioPreview = document.getElementById('audioPreview');
 
+// NEW: Mic permission indicator
+const micStatus = document.createElement('div');
+micStatus.id = 'micStatus';
+micStatus.style.fontSize = '0.75rem';
+micStatus.style.color = 'red';
+micStatus.style.marginBottom = '0.5rem';
+micIndicator.parentElement.insertBefore(micStatus, micIndicator);
+
 let audio = new Audio();
 let isPlaying = false;
 
@@ -82,6 +90,13 @@ audio.addEventListener('ended', () => {
     updatePlayIcon();
 });
 
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60).toString().padStart(2, '0');
+    return `${min}:${sec}`;
+}
+
+// Icon updates
 function updatePlayIcon() {
     playPauseBtn.innerHTML = `
         <svg viewBox="0 0 24 24" width="20" height="20">
@@ -123,21 +138,46 @@ function updateResetIcon() {
     `;
 }
 
+// Request mic permission ahead of time and display visual status
+async function checkMicPermissions() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach(track => track.stop()); // Immediately stop stream
+        micStatus.textContent = ''; // Clear warning
+    } catch (err) {
+        micStatus.textContent = 'Microphone access is required. Click to retry.';
+        micStatus.style.cursor = 'pointer';
+        micStatus.onclick = () => {
+            micStatus.textContent = 'Re-checking permissions...';
+            checkMicPermissions();
+        };
+    }
+}
+
 // Start recording
 startBtn.addEventListener('click', () => {
-    startRecording(
-        () => {
-            toggleRecordingUI(true, startBtn, stopBtn, micIndicator);
-            startTimer(updateTimerDisplay);
-        },
-        () => {
-            stopTimer();
-            toggleRecordingUI(false, startBtn, stopBtn, micIndicator);
-            updateContinueIcon();
-            updateTimerDisplay();
-            previewRecording();
-        }
-    );
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            stream.getTracks().forEach(track => track.stop()); // Stop mic until needed
+            startRecording(
+                () => {
+                    toggleRecordingUI(true, startBtn, stopBtn, micIndicator);
+                    startTimer(updateTimerDisplay);
+                    micStatus.textContent = '';
+                },
+                () => {
+                    stopTimer();
+                    toggleRecordingUI(false, startBtn, stopBtn, micIndicator);
+                    updateContinueIcon();
+                    updateTimerDisplay();
+                    previewRecording();
+                }
+            );
+        })
+        .catch(() => {
+            micStatus.textContent = 'Microphone access denied. Click to try again.';
+            micStatus.style.cursor = 'pointer';
+        });
 });
 
 stopBtn.addEventListener('click', stopRecording);
@@ -162,7 +202,8 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     });
 });
 
-// Init icons
+// Init icons + mic check
 updateStartIcon();
 updateResetIcon();
 updatePlayIcon();
+checkMicPermissions();

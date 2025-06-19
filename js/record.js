@@ -10,9 +10,26 @@ export function isRecording() {
   return mediaRecorder && mediaRecorder.state === 'recording';
 }
 
-export function startRecording(onRecordingStart = () => {}, onRecordingStop = () => {}) {
-  navigator.mediaDevices.getUserMedia({ audio: true }).then(userStream => {
-    stream = userStream;
+export async function hasMicPermission() {
+  try {
+    const status = await navigator.permissions.query({ name: 'microphone' });
+    return status.state;
+  } catch (err) {
+    console.warn('Permissions API not supported.');
+    return 'prompt';
+  }
+}
+
+export async function startRecording(onRecordingStart = () => {}, onRecordingStop = () => {}) {
+  try {
+    // Request permission + stream
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+    // Auto stop any open stream (shouldn't happen, but safe)
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+    }
+
     const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
     mediaRecorder = new MediaRecorder(stream, { mimeType });
     audioChunks = [];
@@ -24,17 +41,26 @@ export function startRecording(onRecordingStart = () => {}, onRecordingStop = ()
     };
 
     mediaRecorder.onstop = () => {
-      if (stream) stream.getTracks().forEach(track => track.stop());
-      if (audioChunks.length > 0) blobSegments.push(new Blob(audioChunks));
-      onRecordingStop(); // trigger preview only after storing blob
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop()); // 🔇 turn off mic immediately
+        stream = null;
+      }
+      if (audioChunks.length > 0) {
+        blobSegments.push(new Blob(audioChunks));
+      }
+      onRecordingStop();
     };
 
     mediaRecorder.start();
     onRecordingStart(true);
-  }).catch(err => {
+  } catch (err) {
     console.error("Error accessing microphone:", err);
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop()); // failsafe cleanup
+      stream = null;
+    }
     onRecordingStart(false);
-  });
+  }
 }
 
 export function stopRecording() {
