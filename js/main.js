@@ -134,16 +134,16 @@ startBtn.addEventListener('click', () => {
 navigator.mediaDevices.getUserMedia({ audio: true })
     .then(s => {
     s.getTracks().forEach(t=>t.stop());
-    micIndicator.style.display = 'flex';
-    const used    = getRecordedTime();             // how many seconds already recorded
-    const remain  = Math.max(0, getMaxTime() - used);
-    timeLeftEl.textContent = `${remain}s left`;
+    micIndicator.classList.add('active');
+    const already = getRecordedTime();            // how many seconds already recorded
+    const remaining = Math.max(0, getMaxTime() - already);
+    timeLeftEl.textContent = `${remaining}s left`;
     startRecording(
         () => {
         toggleRecordingUI(true, startBtn, stopBtn, micIndicator);
         startTimer(sec => {
-            const left = Math.max(0, getMaxTime() - sec - used);
-            timeLeftEl.textContent = `${left}s left`;
+            const left2 = Math.max(0, getMaxTime() - sec);
+            timeLeftEl.textContent = `${left2}s left`;
         });
         micStatus.hidden = true;
         },
