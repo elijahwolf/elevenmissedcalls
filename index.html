@@ -46,14 +46,10 @@
       <h2 class="record-title">record your own message</h2>
       <div class="recorder-controls">
         <button id="startBtn" class="icon-btn" title="Start Recording">
-          <svg viewBox="0 0 24 24" width="20" height="20">
-            <circle cx="12" cy="12" r="6" />
-          </svg>
+          <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="6" /></svg>
         </button>
         <button id="stopBtn" class="icon-btn" disabled title="Stop Recording">
-          <svg viewBox="0 0 24 24" width="20" height="20">
-            <rect x="6" y="6" width="12" height="12" />
-          </svg>
+          <svg viewBox="0 0 24 24" width="20" height="20"><rect x="6" y="6" width="12" height="12" /></svg>
         </button>
         <button id="resetBtn" class="icon-btn" title="Start Over">
           <svg viewBox="0 0 24 24" width="20" height="20">
@@ -64,22 +60,21 @@
       </div>
 
       <div class="mic-indicator" id="micIndicator">
-        <span class="mic-dot"></span> recording...
+        <span class="mic-dot"></span>
+        <span class="mic-text">recording…</span>
+        <span class="time-left" id="timeLeft">90s left</span>
       </div>
 
       <div id="micPermissionStatus" class="mic-permission-status" hidden>
-        <p>🎤 Microphone permission denied. Please enable it in your browser settings to record.</p>
+        <p>Microphone permission denied. Please enable it in your browser settings to record.</p>
       </div>
 
       <div class="audio-preview" id="audioPreview" style="display: none">
         <div class="audio-bar">
           <button id="playPauseBtn" class="icon-btn" aria-label="Play/Pause">
-            <svg id="playIcon" viewBox="0 0 24 24">
-              <polygon points="5,3 19,12 5,21" />
-            </svg>
+            <svg id="playIcon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" /></svg>
             <svg id="pauseIcon" viewBox="0 0 24 24" style="display: none;">
-              <rect x="6" y="4" width="4" height="16" />
-              <rect x="14" y="4" width="4" height="16" />
+              <rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />
             </svg>
           </button>
           <input type="range" id="seekBar" value="0" min="0" max="100" step="1" />

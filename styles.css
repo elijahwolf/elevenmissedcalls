@@ -100,10 +100,8 @@ a:hover {
   margin: 0.75rem 0;
   font-size: 0.7rem;
   text-transform: lowercase;
-}
-
-.mic-indicator.active {
-  display: block;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .mic-dot {
@@ -287,6 +285,15 @@ button:disabled {
 .audio-bar input[type="range"]::-moz-range-track {
   height: 6px;
   background: transparent;
+}
+
+.playback-length[hidden] {
+  display: none;
+}
+
+.playback-length {
+  font-size: 0.8rem;
+  color: #00ff99;
 }
 
 @media (max-width: 480px) {
