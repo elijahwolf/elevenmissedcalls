@@ -189,6 +189,8 @@ a:hover {
 .audio-preview {
   display: none; /* made visible via JS on previewRecording() */
   margin: 1rem 0;
+  justify-content: center;
+  align-items: center;
 }
 
 .audio-bar {
