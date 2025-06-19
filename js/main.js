@@ -97,16 +97,19 @@ seekBar.addEventListener('input', () => {
 if (!audio.duration) return;
 audio.currentTime = (seekBar.value/100)*audio.duration;
 });
-playPauseBtn.addEventListener('click', () => {
-if (isPlaying) {
-    audio.pause();
-    updatePlayIcon();
-} else {
-    audio.play();
-    updatePauseIcon();
-}
-isPlaying = !isPlaying;
-});
+['click', 'touchend'].forEach(evt =>
+    playPauseBtn.addEventListener(evt, e => {
+      e.preventDefault();            // kill the ghost-click
+      if (isPlaying) {
+        audio.pause();
+        updatePlayIcon();
+      } else {
+        audio.play();
+        updatePauseIcon();
+      }
+      isPlaying = !isPlaying;
+    })
+  );
 audio.addEventListener('ended', () => {
 isPlaying = false;
 updatePlayIcon();
