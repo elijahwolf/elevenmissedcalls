@@ -105,7 +105,7 @@ a:hover {
 
 /* recording UI */
 
-/* buttons */
+/* icon buttons */
 .icon-btn {
   background: none;
   border: none;
@@ -150,15 +150,18 @@ a:hover {
 
 /* mic status (recording… + seconds-left) */
 .mic-indicator {
-  display: none; /* shown via JS when recording starts */
+  display: none; /* hidden by default */
   margin: 0.75rem 0;
   font-size: 0.8rem;
   color: #00ff99;
   text-transform: lowercase;
-  display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+}
+.mic-indicator.active {
+  /* shown only when JS adds .active */
+  display: flex;
 }
 
 .mic-indicator .mic-dot {
@@ -180,12 +183,11 @@ a:hover {
   color: #ff5555;
   margin: 0.5rem 0;
   text-align: center;
-  display: block; /* toggled hidden/visible by JS */
 }
 
 /* audio-preview container */
 .audio-preview {
-  display: none; /* shown via JS when previewRecording() runs */
+  display: none; /* made visible via JS on previewRecording() */
   margin: 1rem 0;
 }
 
@@ -257,9 +259,7 @@ button#submitBtn:hover:enabled {
 
 /* recorded-length (fallback) */
 .recorded-length {
-  font-size: 0.8rem;
-  color: #00ff99;
-  margin-top: 0.5rem;
+  display: none; /* we no longer show the old fallback */
 }
 
 /* note */
@@ -296,7 +296,6 @@ audio {
     font-size: 1.2rem;
   }
   p,
-  .recorded-length,
   .mic-permission-status {
     font-size: 0.75rem;
   }

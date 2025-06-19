@@ -1,15 +1,14 @@
 // timer.js — tracks total recorded duration
 
-let maxSeconds = 90;
-let recordedSeconds = 0;
-let countdownInterval = null;
+let maxSeconds       = 90;
+let recordedSeconds  = 0;
+let countdownInterval;
 
 export function startTimer(onUpdate) {
-  stopTimer(); // Clear any previous interval
-
+  clearInterval(countdownInterval);
   countdownInterval = setInterval(() => {
     if (recordedSeconds >= maxSeconds) {
-      stopTimer();
+      clearInterval(countdownInterval);
     } else {
       recordedSeconds++;
       onUpdate(recordedSeconds);
@@ -18,15 +17,12 @@ export function startTimer(onUpdate) {
 }
 
 export function stopTimer() {
-  if (countdownInterval) {
-    clearInterval(countdownInterval);
-    countdownInterval = null;
-  }
+  clearInterval(countdownInterval);
 }
 
 export function resetTimer() {
-  stopTimer();
   recordedSeconds = 0;
+  clearInterval(countdownInterval);
 }
 
 export function getRecordedTime() {
@@ -35,8 +31,4 @@ export function getRecordedTime() {
 
 export function getMaxTime() {
   return maxSeconds;
-}
-
-export function isMaxReached() {
-  return recordedSeconds >= maxSeconds;
 }

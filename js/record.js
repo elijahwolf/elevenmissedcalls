@@ -1,8 +1,8 @@
 // record.js — handles recording and exporting merged audio
 
 let mediaRecorder;
-let audioChunks = [];
-let blobSegments = [];
+let audioChunks   = [];
+let blobSegments  = [];
 let stream;
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -10,44 +10,29 @@ export function isRecording() {
   return mediaRecorder && mediaRecorder.state === 'recording';
 }
 
-export async function hasMicPermission() {
-  try {
-    const status = await navigator.permissions.query({ name: 'microphone' });
-    return status.state;
-  } catch (err) {
-    console.warn('Permissions API not supported.');
-    return 'prompt';
-  }
-}
-
 export async function startRecording(onRecordingStart = () => {}, onRecordingStop = () => {}) {
   try {
-    // Request permission + stream
     stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-    // Auto stop any open stream (shouldn't happen, but safe)
+    // stop previous if any
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
       mediaRecorder.stop();
     }
 
-    const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
+    const mimeType = MediaRecorder.isTypeSupported('audio/webm')
+                   ? 'audio/webm'
+                   : 'audio/mp4';
     mediaRecorder = new MediaRecorder(stream, { mimeType });
     audioChunks = [];
 
     mediaRecorder.ondataavailable = e => {
-      if (e.data && e.data.size > 0) {
-        audioChunks.push(e.data);
-      }
+      if (e.data && e.data.size > 0) audioChunks.push(e.data);
     };
 
     mediaRecorder.onstop = () => {
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop()); // 🔇 turn off mic immediately
-        stream = null;
-      }
-      if (audioChunks.length > 0) {
-        blobSegments.push(new Blob(audioChunks));
-      }
+      stream.getTracks().forEach(t => t.stop());
+      stream = null;
+      if (audioChunks.length) blobSegments.push(new Blob(audioChunks));
       onRecordingStop();
     };
 
@@ -56,7 +41,7 @@ export async function startRecording(onRecordingStart = () => {}, onRecordingSto
   } catch (err) {
     console.error("Error accessing microphone:", err);
     if (stream) {
-      stream.getTracks().forEach(track => track.stop()); // failsafe cleanup
+      stream.getTracks().forEach(t => t.stop());
       stream = null;
     }
     onRecordingStart(false);
@@ -64,9 +49,7 @@ export async function startRecording(onRecordingStart = () => {}, onRecordingSto
 }
 
 export function stopRecording() {
-  if (isRecording()) {
-    mediaRecorder.stop();
-  }
+  if (isRecording()) mediaRecorder.stop();
 }
 
 export function resetRecording() {
@@ -75,7 +58,6 @@ export function resetRecording() {
 
 export async function exportMergedRecording() {
   if (!blobSegments.length) {
-    // nothing recorded yet → return an empty WAV to keep downstream safe
     return new Blob([], { type: 'audio/wav' });
   }
   const buffers = await Promise.all(
@@ -83,7 +65,6 @@ export async function exportMergedRecording() {
       blob.arrayBuffer().then(buf => audioContext.decodeAudioData(buf))
     )
   );
-
   const totalLength = buffers.reduce((sum, b) => sum + b.length, 0);
   const output = audioContext.createBuffer(1, totalLength, audioContext.sampleRate);
 
@@ -92,18 +73,15 @@ export async function exportMergedRecording() {
     output.getChannelData(0).set(b.getChannelData(0), offset);
     offset += b.length;
   }
-
   return exportWAV(output);
 }
 
 function exportWAV(buffer) {
   const length = buffer.length * 2 + 44;
-  const view = new DataView(new ArrayBuffer(length));
+  const view   = new DataView(new ArrayBuffer(length));
 
-  function writeString(view, offset, str) {
-    for (let i = 0; i < str.length; i++) {
-      view.setUint8(offset + i, str.charCodeAt(i));
-    }
+  function writeString(v, o, s) {
+    for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i));
   }
 
   writeString(view, 0, 'RIFF');
@@ -120,11 +98,11 @@ function exportWAV(buffer) {
   writeString(view, 36, 'data');
   view.setUint32(40, buffer.length * 2, true);
 
-  const audio = buffer.getChannelData(0);
-  let offset = 44;
-  for (let i = 0; i < audio.length; i++, offset += 2) {
-    const s = Math.max(-1, Math.min(1, audio[i]));
-    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+  const audioData = buffer.getChannelData(0);
+  let ptr = 44;
+  for (let i = 0; i < audioData.length; i++, ptr += 2) {
+    const s = Math.max(-1, Math.min(1, audioData[i]));
+    view.setInt16(ptr, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
   }
 
   return new Blob([view], { type: 'audio/wav' });
