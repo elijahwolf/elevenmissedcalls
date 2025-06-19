@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>missed calls</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
@@ -26,6 +26,7 @@
     <button class="tab-btn" data-tab="recordTab">record</button>
   </div>
 
+  <!-- CALL PANEL -->
   <div class="tab-content active" id="callTab">
     <div class="window">
       <div class="number">
@@ -35,19 +36,23 @@
       <p>no names.</p>
       <p>no pressure.</p>
       <p>just say it.</p>
-      <p class="tagline">we're listening.<span class="cursor">_</span></p>
-      <p class="shared-label">
-        some messages will be shared anonymously on:
+      <p class="tagline">
+        we're listening.<span class="cursor">_</span>
       </p>
-      <p class="social-links">
-        <a href="https://www.tiktok.com/@elevenmissedcalls" target="_blank"
-          >TikTok</a
-        >
-      </p>
-      <div class="footer">powered by what you didn't say • est. 2023</div>
+    </div>
+    <!-- shared footer under the box -->
+    <p class="shared-label">
+      some messages will be shared anonymously on:
+      <a href="https://www.tiktok.com/@elevenmissedcalls" target="_blank"
+        >TikTok</a
+      >
+    </p>
+    <div class="footer">
+      powered by what you didn't say • est. 2023
     </div>
   </div>
 
+  <!-- RECORD PANEL -->
   <div class="tab-content" id="recordTab">
     <div class="window">
       <h2 class="record-title">record your own message</h2>
@@ -78,14 +83,17 @@
         </button>
       </div>
 
-      <!-- only visible while actually recording -->
       <div class="mic-indicator" id="micIndicator">
         <span class="mic-dot"></span>
         <span class="mic-text">recording…</span>
         <span class="time-left" id="timeLeft">90s left</span>
       </div>
 
-      <div id="micPermissionStatus" class="mic-permission-status" hidden></div>
+      <div
+        id="micPermissionStatus"
+        class="mic-permission-status"
+        hidden
+      ></div>
 
       <div class="audio-preview" id="audioPreview">
         <div class="audio-bar">
@@ -113,8 +121,16 @@
       <div class="preview-controls">
         <button id="submitBtn" disabled>submit</button>
       </div>
-
-      <p class="note">recordings are anonymous and capped at 90 seconds.</p>
+    </div>
+    <!-- shared footer under the box -->
+    <p class="shared-label">
+      some messages will be shared anonymously on:
+      <a href="https://www.tiktok.com/@elevenmissedcalls" target="_blank"
+        >TikTok</a
+      >
+    </p>
+    <div class="footer">
+      powered by what you didn't say • est. 2023
     </div>
   </div>
 
