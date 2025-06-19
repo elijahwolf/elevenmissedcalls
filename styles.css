@@ -1,3 +1,4 @@
+/* Base styling */
 body {
   font-family: "Press Start 2P", monospace;
   background-color: black;
@@ -5,43 +6,38 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  text-align: center;
   min-height: 100vh;
   margin: 0;
   padding: 1rem;
-  background-image: none;
   box-sizing: border-box;
-  text-align: center;
 }
 
 .title {
   font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #00ff99;
-  text-shadow: 1px 1px 0 #00ff99, -1px -1px 0 #00ff99;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 2px #00ff99, 0 0 5px #00ff99;
 }
 
 .tabs {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
 }
 
 .tab-btn {
-  font-family: inherit;
-  font-size: 0.8rem;
-  background: black;
-  color: #00ff99;
+  background: none;
   border: 2px solid #00ff99;
-  padding: 0.3rem 1rem;
+  color: #00ff99;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
   cursor: pointer;
-  text-transform: lowercase;
+  font-size: 0.8rem;
 }
 
 .tab-btn.active {
-  background: #00ff99;
+  background-color: #00ff99;
   color: black;
 }
 
@@ -53,7 +49,6 @@ body {
 
 .tab-content.active {
   display: block;
-  margin: 0 auto;
 }
 
 .window {
@@ -62,12 +57,20 @@ body {
   padding: 2rem;
   box-shadow: 0 0 10px #00ff99;
   box-sizing: border-box;
-  width: 100%;
-  margin: 0 auto;
+}
+
+.number {
+  font-size: 2rem;
+  margin: 1.5rem 0;
 }
 
 p {
   margin: 0.75rem 0;
+}
+
+.social-links {
+  font-size: 0.8rem;
+  word-spacing: 0.2rem;
 }
 
 a {
@@ -80,251 +83,125 @@ a:hover {
   text-shadow: 0 0 5px #00ff99;
 }
 
-.number {
-  font-size: 2rem;
-  margin: 1.5rem 0;
-}
-
 .footer {
   font-size: 0.6rem;
   margin-top: 2rem;
 }
 
-.social-links {
-  font-size: 0.8rem;
-  word-spacing: 0.2rem;
+.cursor {
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+.window {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 10px #00ff99;
+  }
+  50% {
+    box-shadow: 0 0 20px #00ff99;
+  }
+}
+
+/* Recorder styles */
+.recorder-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+button {
+  font-family: inherit;
+  font-size: 0.7rem;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 2px solid #00ff99;
+  color: #00ff99;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .mic-indicator {
   display: none;
-  margin: 0.75rem 0;
+  margin: 0.5rem 0;
   font-size: 0.7rem;
-  text-transform: lowercase;
-}
-
-.mic-indicator.active {
-  display: block;
+  color: #ff0044;
 }
 
 .mic-dot {
   display: inline-block;
-  width: 0.5rem;
-  height: 0.5rem;
-  background-color: red;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: #ff0044;
   border-radius: 50%;
-  margin-right: 0.4rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
 }
 
-.recorder-controls {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.timer {
+  font-size: 0.8rem;
   margin-bottom: 0.75rem;
 }
 
-.recorded-length {
-  font-size: 0.8rem;
-  margin-top: 0.5rem;
-  color: #00ff99;
-}
-
-.preview-controls {
-  margin-top: 0.5rem;
+audio {
+  margin: 1rem 0 0.5rem 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .note {
   font-size: 0.6rem;
-  margin-top: 1.5rem;
+  opacity: 0.7;
+  margin-top: 0.5rem;
 }
 
-audio {
-  margin-top: 1rem;
-  max-width: 100%;
-  filter: hue-rotate(100deg) brightness(1.2) contrast(1.3);
-  background-color: black;
-  border: 2px solid #00ff99;
-  border-radius: 4px;
-  box-shadow: 0 0 10px #00ff99;
-  padding: 0.3rem;
-}
-
-button {
-  font-family: "Press Start 2P", monospace;
-  background: black;
-  color: #00ff99;
-  border: 2px solid #00ff99;
-  padding: 0.4rem 1rem;
-  font-size: 0.8rem;
-  cursor: pointer;
-  text-transform: lowercase;
-  margin: 0.25rem;
-  transition: all 0.2s ease-in-out;
-}
-
-button:hover:enabled {
-  background: #00ff99;
-  color: black;
-  text-shadow: 0 0 5px #00ff99;
-}
-
-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.audio-preview {
-  margin-top: 1rem;
-}
-
-.audio-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  justify-content: center;
-}
-
-.icon-btn {
-  background: none;
-  border: none;
-  padding: 0.3rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #00ff99;
-  fill: #00ff99;
-  transition: filter 0.2s ease;
-}
-
-.icon-btn:hover {
-  filter: brightness(1.5);
-}
-
-.icon-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-#seekBar {
-  width: 150px;
-  height: 6px;
-  background: transparent;
-  outline: none;
-  border-radius: 4px;
-  appearance: none;
-  -webkit-appearance: none;
-  position: relative;
-  z-index: 1;
-}
-
-#seekBar::-webkit-slider-thumb {
-  width: 12px;
-  height: 12px;
-  background: #00ff99;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  -webkit-appearance: none;
-  position: relative;
-  z-index: 2;
-  will-change: transform;
-}
-
-#seekBar::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  background: #00ff99;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  will-change: transform;
-}
-
-#timeDisplay {
-  font-size: 0.8rem;
-  color: #00ff99;
-}
-
-.icon-btn svg {
-  width: 20px;
-  height: 20px;
-  fill: currentColor;
-  stroke: none;
-  transition: transform 0.2s ease, filter 0.2s ease;
-  pointer-events: none;
-}
-
-.icon-btn:hover svg {
-  transform: scale(1.1);
-}
-
-.icon-btn:active svg {
-  transform: scale(0.95);
-}
-
-.icon-btn:disabled svg {
-  opacity: 0.4;
-}
-
-/* Improve clarity for SVG buttons and prevent ghosting trail */
-.audio-bar input[type="range"] {
-  background: linear-gradient(
-    to right,
-    #00ff99 0%,
-    #00ff99 var(--progress),
-    #111 var(--progress),
-    #111 100%
-  );
-  --progress: 0%;
-}
-
-.audio-bar input[type="range"]::-webkit-slider-runnable-track {
-  height: 6px;
-  background: transparent;
-}
-
-.audio-bar input[type="range"]::-moz-range-track {
-  height: 6px;
-  background: transparent;
-}
-
+/* Responsive styling */
 @media (max-width: 480px) {
   body {
     font-size: 10px;
   }
 
   .window {
-    padding: 1rem;
+    padding: 1.2rem;
   }
 
   .number {
     font-size: 1.5rem;
   }
 
-  h1,
-  h2 {
+  h1 {
     font-size: 1.2rem;
   }
 
-  p,
-  .recorded-length {
-    font-size: 0.75rem;
+  p {
+    font-size: 0.8rem;
   }
 
-  .tab-btn {
-    padding: 0.3rem 0.8rem;
+  .social-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
     font-size: 0.7rem;
   }
 
-  .footer,
-  .note {
-    font-size: 0.5rem;
-  }
-
-  .tabs {
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
+  .tab-btn {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
   }
 }

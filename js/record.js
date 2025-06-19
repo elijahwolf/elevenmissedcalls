@@ -1,64 +1,74 @@
-// record.js — handles recording and exporting merged audio
-
 let mediaRecorder;
 let audioChunks = [];
 let blobSegments = [];
 let stream;
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
+export let timeLeft = 90;
+let timerInterval = null;
+
+export function getTimeLeft() {
+  return timeLeft;
+}
+
 export function isRecording() {
   return mediaRecorder && mediaRecorder.state === 'recording';
 }
 
-export function startRecording(onRecordingStart = () => {}, onRecordingStop = () => {}) {
+export function startRecording(onDataStop, onTimerUpdate, onRecordingEnd) {
+  if (timeLeft <= 0) return;
+
   navigator.mediaDevices.getUserMedia({ audio: true }).then(userStream => {
     stream = userStream;
     const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
     mediaRecorder = new MediaRecorder(stream, { mimeType });
     audioChunks = [];
 
-    mediaRecorder.ondataavailable = e => {
-      if (e.data && e.data.size > 0) {
-        audioChunks.push(e.data);
-      }
-    };
+    mediaRecorder.ondataavailable = e => e.data.size > 0 && audioChunks.push(e.data);
 
     mediaRecorder.onstop = () => {
-      if (stream) stream.getTracks().forEach(track => track.stop());
+      stream.getTracks().forEach(track => track.stop());
       if (audioChunks.length > 0) blobSegments.push(new Blob(audioChunks));
-      onRecordingStop(); // trigger preview only after storing blob
+      onDataStop();
     };
 
     mediaRecorder.start();
-    onRecordingStart(true);
-  }).catch(err => {
-    console.error("Error accessing microphone:", err);
-    onRecordingStart(false);
+    onRecordingEnd(true);
+
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      onTimerUpdate(timeLeft);
+      if (timeLeft <= 0) {
+        stopRecording();
+      }
+    }, 1000);
   });
 }
 
 export function stopRecording() {
-  if (isRecording()) {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
     mediaRecorder.stop();
+    clearInterval(timerInterval);
   }
 }
 
 export function resetRecording() {
+  timeLeft = 90;
+  clearInterval(timerInterval);
+  timerInterval = null;
   blobSegments = [];
 }
 
 export async function exportMergedRecording() {
-  const buffers = await Promise.all(
-    blobSegments.map(blob =>
-      blob.arrayBuffer().then(buf => audioContext.decodeAudioData(buf))
-    )
-  );
+  const buffers = await Promise.all(blobSegments.map(blob =>
+    blob.arrayBuffer().then(buf => audioContext.decodeAudioData(buf))
+  ));
 
   const totalLength = buffers.reduce((sum, b) => sum + b.length, 0);
   const output = audioContext.createBuffer(1, totalLength, audioContext.sampleRate);
 
   let offset = 0;
-  for (const b of buffers) {
+  for (let b of buffers) {
     output.getChannelData(0).set(b.getChannelData(0), offset);
     offset += b.length;
   }
@@ -71,9 +81,7 @@ function exportWAV(buffer) {
   const view = new DataView(new ArrayBuffer(length));
 
   function writeString(view, offset, str) {
-    for (let i = 0; i < str.length; i++) {
-      view.setUint8(offset + i, str.charCodeAt(i));
-    }
+    for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
   }
 
   writeString(view, 0, 'RIFF');
