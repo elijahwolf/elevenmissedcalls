@@ -172,13 +172,13 @@ stopBtn.addEventListener('click', stopRecording);
 
 // RESET — full reset of blobs & timer
 resetBtn.addEventListener('click', () => {
-resetRecording();
-resetTimer();
-resetUI(audioPreview, submitBtn, startBtn, stopBtn);
-updateStartIcon();
-updateResetIcon();
-micIndicator.classList.remove('active')
-timeLeftEl.textContent = `${getMaxTime()}s left`;
+    resetRecording();
+    resetTimer();
+    resetUI(audio, submitBtn, startBtn, stopBtn);
+    updateStartIcon();
+    updateResetIcon();
+    micIndicator.classList.remove('active');
+    timeLeftEl.textContent = `${getMaxTime()}s left`;
 });
 
 // SUBMIT stub
