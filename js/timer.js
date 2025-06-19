@@ -1,9 +1,34 @@
-// timer.js — handles timer display and formatting
+// timer.js — tracks total recorded duration
 
-export function updateTimerDisplay(time, element) {
-    element.textContent = `${time}s remaining`;
-  }
-  
-  export function resetTimerDisplay(element) {
-    element.textContent = `90s remaining`;
-  }
+let maxSeconds = 90;
+let recordedSeconds = 0;
+let countdownInterval;
+
+export function startTimer(onUpdate) {
+  clearInterval(countdownInterval);
+  countdownInterval = setInterval(() => {
+    if (recordedSeconds >= maxSeconds) {
+      clearInterval(countdownInterval);
+    } else {
+      recordedSeconds++;
+      onUpdate(recordedSeconds);
+    }
+  }, 1000);
+}
+
+export function stopTimer() {
+  clearInterval(countdownInterval);
+}
+
+export function resetTimer() {
+  recordedSeconds = 0;
+  clearInterval(countdownInterval);
+}
+
+export function getRecordedTime() {
+  return recordedSeconds;
+}
+
+export function getMaxTime() {
+  return maxSeconds;
+}
