@@ -68,6 +68,7 @@ body {
   box-sizing: border-box;
   width: 100%;
   margin: 0 auto;
+  min-height: 400px;
 }
 
 /* text basics */
