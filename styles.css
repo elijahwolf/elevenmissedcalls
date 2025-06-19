@@ -296,6 +296,13 @@ button:disabled {
   color: #00ff99;
 }
 
+.time-left {
+  margin-left: 1rem;
+  font-size: 0.7rem;
+  color: #00ff99;
+  text-transform: none;
+}
+
 @media (max-width: 480px) {
   body {
     font-size: 10px;
